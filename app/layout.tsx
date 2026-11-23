@@ -2,6 +2,7 @@ import type { Metadata } from 'next';
 import { Inter, Inter_Tight, JetBrains_Mono } from 'next/font/google';
 import '../styles/tokens.css';
 import './globals.css';
+import Dock from '../components/Dock/Dock';
 
 const interTight = Inter_Tight({
   subsets: ['latin'],
@@ -42,7 +43,10 @@ export default function RootLayout({
       lang="en"
       className={`${interTight.variable} ${inter.variable} ${jetbrainsMono.variable}`}
     >
-      <body>{children}</body>
+      <body>
+        {children}
+        <Dock />
+      </body>
     </html>
   );
 }

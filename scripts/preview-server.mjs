@@ -1,7 +1,10 @@
 import http from 'node:http';
 import { createReadStream, existsSync, statSync } from 'node:fs';
+import { createGzip } from 'node:zlib';
 import { extname, join } from 'node:path';
 import { fileURLToPath, pathToFileURL } from 'node:url';
+
+const COMPRESSIBLE = new Set(['.html', '.js', '.mjs', '.css', '.json', '.svg', '.xml', '.txt']);
 
 const __dirname = fileURLToPath(new URL('.', import.meta.url));
 const ROOT = join(__dirname, '..', 'out');
@@ -51,9 +54,17 @@ export function createServer() {
       res.end('404 Not Found');
       return;
     }
-    const type = MIME[extname(filePath)] || 'application/octet-stream';
-    res.writeHead(200, { 'Content-Type': type });
-    createReadStream(filePath).pipe(res);
+    const ext = extname(filePath);
+    const type = MIME[ext] || 'application/octet-stream';
+    const acceptsGzip = (req.headers['accept-encoding'] || '').includes('gzip');
+
+    if (COMPRESSIBLE.has(ext) && acceptsGzip) {
+      res.writeHead(200, { 'Content-Type': type, 'Content-Encoding': 'gzip' });
+      createReadStream(filePath).pipe(createGzip()).pipe(res);
+    } else {
+      res.writeHead(200, { 'Content-Type': type });
+      createReadStream(filePath).pipe(res);
+    }
   });
 }
 

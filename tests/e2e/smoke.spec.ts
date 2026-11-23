@@ -32,6 +32,39 @@ test('is noindex with a canonical link to the current site', async ({ page }) =>
   expect(canonical).toBe('https://collinsnwaoyo.github.io/portfolio/');
 });
 
+test('all six homepage sections are present', async ({ page }) => {
+  await page.goto('./');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText('Designer.');
+  await expect(page.locator('#work')).toContainText('My work.');
+  await expect(page.locator('#everything')).toContainText('Everything.');
+  await expect(page.getByText('Twenty-plus products, one method')).toBeVisible();
+  await expect(page.locator('#think')).toContainText('How I think about the work.');
+  await expect(page.locator('#contact')).toContainText("Let’s build.");
+});
+
+test('everything grid shows all 14 items with the right filter counts', async ({ page }) => {
+  await page.goto('./');
+  await expect(page.getByRole('tab', { name: 'All 14' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'Projects 9' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'Snippets 4' })).toBeVisible();
+  await expect(page.getByRole('tab', { name: 'Illustration 1' })).toBeVisible();
+  await expect(page.locator('#everything li')).toHaveCount(14);
+});
+
+test('dock menu opens, traps focus, and closes on Escape', async ({ page }) => {
+  await page.goto('./');
+  const toggle = page.getByRole('button', { name: 'Open menu' });
+  await toggle.click();
+
+  const menu = page.getByRole('dialog', { name: 'Site menu' });
+  await expect(menu).toBeVisible();
+  await expect(menu.getByRole('link', { name: 'Work' })).toBeFocused();
+
+  await page.keyboard.press('Escape');
+  await expect(menu).toBeHidden();
+  await expect(page.getByRole('button', { name: 'Open menu' })).toBeFocused();
+});
+
 test('screenshot', async ({ page }, testInfo) => {
   await page.goto('./');
   await page.screenshot({

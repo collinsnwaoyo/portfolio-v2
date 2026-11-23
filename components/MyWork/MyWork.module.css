@@ -1,0 +1,316 @@
+@keyframes float {
+  0%,
+  100% {
+    transform: translateY(0) rotate(-0.5deg);
+  }
+  50% {
+    transform: translateY(-4px) rotate(0.5deg);
+  }
+}
+
+.work {
+  padding: 80px 48px 110px;
+  background: var(--panel);
+}
+
+.header {
+  display: flex;
+  justify-content: space-between;
+  align-items: flex-end;
+}
+
+.eyebrow {
+  margin: 0 0 14px;
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  letter-spacing: 0.08em;
+  color: var(--muted);
+}
+
+.title {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  font-size: 96px;
+  line-height: 0.9;
+  letter-spacing: -0.06em;
+}
+
+.desc {
+  margin: 0;
+  max-width: 360px;
+  font-size: 17px;
+  line-height: 1.5;
+  color: #2a2a2a;
+}
+
+.bodyDesktop {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 40px;
+  margin-top: 56px;
+}
+
+.tvWrap {
+  position: relative;
+  width: 680px;
+  height: 486px;
+}
+
+.tvBezelArea {
+  position: absolute;
+  left: 13.9%;
+  top: 9.9%;
+  width: 72.6%;
+  height: 75.1%;
+  background: #000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  overflow: hidden;
+}
+
+.tvScreen {
+  width: 100%;
+  height: 56.25%;
+  position: relative;
+  background: var(--ink);
+}
+
+.tvScreenImg {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  display: block;
+}
+
+.tvCaption {
+  position: absolute;
+  left: 12px;
+  bottom: 10px;
+  font-family: var(--font-mono), monospace;
+  font-size: 10px;
+  color: #fff;
+  background: rgba(14, 14, 14, 0.65);
+  padding: 2px 6px;
+  border-radius: 4px;
+}
+
+.tvFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.discRow {
+  display: flex;
+  gap: 26px;
+  list-style: none;
+  margin: 0;
+  padding: 0;
+}
+
+.discItem {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 10px;
+}
+
+.discCase {
+  position: relative;
+  animation: float 6.5s ease-in-out infinite;
+}
+
+.caseImg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+}
+
+.discImg {
+  position: absolute;
+  left: 52.86%;
+  top: 50.27%;
+  width: 75%;
+  height: auto;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+
+.nowPlaying {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--accent);
+}
+
+.discLabel {
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  color: var(--muted);
+}
+
+.discOutcome {
+  font-size: 12px;
+  color: #2a2a2a;
+  max-width: 170px;
+  text-align: center;
+}
+
+.scrollMore {
+  margin: 8px 0 0;
+  font-size: 14px;
+  color: var(--muted);
+  display: inline-flex;
+  align-items: center;
+  gap: 8px;
+}
+
+.bodyMobile {
+  display: none;
+}
+
+@media (max-width: 640px) {
+  .work {
+    padding: 52px 0 44px;
+  }
+
+  .header {
+    flex-direction: column;
+    align-items: flex-start;
+    padding: 0 20px;
+  }
+
+  .title {
+    font-size: 56px;
+  }
+
+  .desc {
+    margin-top: 12px;
+    font-size: 15px;
+    max-width: none;
+  }
+
+  .bodyDesktop {
+    display: none;
+    content-visibility: hidden;
+  }
+
+  .bodyMobile {
+    display: block;
+    margin-top: 26px;
+  }
+
+  .cardRail {
+    display: flex;
+    gap: 14px;
+    margin: 0;
+    padding: 0 20px;
+    list-style: none;
+    overflow-x: auto;
+    scroll-snap-type: x mandatory;
+    -webkit-overflow-scrolling: touch;
+  }
+
+  .card {
+    flex: 0 0 290px;
+    scroll-snap-align: start;
+  }
+
+  .cardButton {
+    display: block;
+    width: 100%;
+    border: 0;
+    padding: 0;
+    background: transparent;
+    text-align: left;
+    font-family: var(--font-body), sans-serif;
+    color: var(--ink);
+    cursor: pointer;
+  }
+
+  .srOnly {
+    position: absolute;
+    width: 1px;
+    height: 1px;
+    overflow: hidden;
+    clip: rect(0, 0, 0, 0);
+    white-space: nowrap;
+  }
+
+  .cardArt {
+    display: flex;
+    align-items: center;
+    justify-content: center;
+    height: 300px;
+    border-radius: 20px;
+    background: #e9e9e6;
+  }
+
+  .cardMeta {
+    display: flex;
+    justify-content: space-between;
+    align-items: flex-start;
+    gap: 12px;
+    padding: 14px 4px 0;
+  }
+
+  .cardIndex {
+    display: block;
+    font-family: var(--font-mono), monospace;
+    font-size: 10px;
+    color: var(--muted);
+  }
+
+  .cardTitle {
+    display: block;
+    font-family: var(--font-display), sans-serif;
+    font-weight: 700;
+    font-size: 24px;
+    letter-spacing: -0.03em;
+  }
+
+  .cardOutcome {
+    display: block;
+    font-size: 13px;
+    color: #3a3a3a;
+  }
+
+  .playPill {
+    flex: 0 0 auto;
+    display: inline-flex;
+    align-items: center;
+    gap: 6px;
+    background: var(--ink);
+    color: var(--paper);
+    border-radius: var(--radius-pill);
+    padding: 0 14px;
+    min-height: 40px;
+    font-size: 13px;
+    font-weight: 600;
+    margin-top: 14px;
+  }
+
+  .swipeHint {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 18px 20px 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+
+  .swipeCount {
+    font-family: var(--font-mono), monospace;
+    font-size: 11px;
+  }
+
+  .scrollMoreMobile {
+    margin: 22px 20px 0;
+    font-size: 13px;
+    color: var(--muted);
+  }
+}
