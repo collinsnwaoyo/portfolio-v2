@@ -1,0 +1,184 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Intro loader prototype</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Inter+Tight:wght@600;700&family=Inter:wght@400;500;600&family=JetBrains+Mono:wght@400;500&display=swap" rel="stylesheet">
+<style>
+:root{--blue:#2440FF;--ink:#0E0E0E;--hop:cubic-bezier(0.9,0,0.1,1);--out:cubic-bezier(0.215,0.61,0.355,1)}
+*{box-sizing:border-box}
+html,body{margin:0;height:100%}
+body{background:var(--blue);font-family:'Inter',sans-serif;color:var(--ink);overflow:hidden}
+
+/* the page that the white frame becomes */
+#page{position:fixed;inset:0;background:#fff;overflow:hidden;clip-path:inset(50% 50% 50% 50%)}
+.top{position:absolute;left:4vw;right:4vw;top:24px;display:flex;justify-content:space-between;align-items:center;font-size:14px;z-index:3}
+.top b{font-weight:600;display:block}.top span.s{color:#6B6B6B}
+.right{display:flex;gap:18px;align-items:center}
+.avail{display:inline-flex;gap:8px;align-items:center;font-weight:600}
+.avail i{width:8px;height:8px;border-radius:50%;background:#2F8A52;display:inline-block}
+.cta{background:var(--blue);color:#fff;text-decoration:none;font-weight:600;border-radius:999px;padding:0 20px;min-height:44px;display:inline-flex;align-items:center}
+.portrait{position:absolute;height:94vh;right:-40vh;bottom:0;mix-blend-mode:multiply;z-index:1;
+  -webkit-mask-image:linear-gradient(to right,transparent 0,#000 24%);mask-image:linear-gradient(to right,transparent 0,#000 24%)}
+.copy{position:absolute;left:4vw;top:22vh;z-index:2}
+.stack{display:inline-block}
+.line{overflow:hidden;display:block}
+.line > span{display:block;transform:translateY(110%)}
+.small{font-family:'Inter Tight',sans-serif;font-weight:600;font-size:clamp(20px,2.6vw,38px);letter-spacing:-0.03em}
+h1{margin:0;font-family:'Inter Tight',sans-serif;font-weight:700;font-size:13.6vw;line-height:0.86;letter-spacing:-0.07em;white-space:nowrap}
+.r{text-align:right}.r em{font-style:normal;color:var(--blue)}
+.sub{max-width:440px;margin:28px 0 0;font-size:17px;line-height:1.55;color:#2A2A2A;opacity:0}
+.dock{position:absolute;left:50%;bottom:36px;transform:translate(-50%,200%);background:var(--ink);color:#fff;border-radius:18px;padding:12px 12px 12px 20px;display:flex;align-items:center;gap:18px;min-width:min(480px,92vw);box-shadow:0 18px 44px rgba(14,14,14,.28);z-index:4}
+.dock .av{width:44px;height:44px;border-radius:12px;background:#444 url(portrait.webp) 38% 30%/260% auto no-repeat}
+.dock .n{display:flex;flex-direction:column;gap:3px;flex-grow:1}.dock .n b{font-size:15px;font-weight:600}
+.dock .n span{font-family:'JetBrains Mono',monospace;font-size:11px;color:#9A9A9A}
+.dock button{width:48px;height:48px;border-radius:12px;border:0;background:var(--blue);color:#fff;font-size:18px}
+
+/* loader */
+#loader{position:fixed;inset:0;z-index:10;pointer-events:none}
+#win{position:fixed;z-index:11;left:50%;top:50%;width:220px;height:280px;margin:-140px 0 0 -110px;overflow:hidden;clip-path:inset(50% 50% 50% 50%)}
+.slide{position:absolute;inset:0;display:none;align-items:center;justify-content:center}
+.slide.on{display:flex}
+.slide img{width:100%;height:100%;object-fit:cover}
+.s-dash{background:#F3F3F1}.s-dash img{object-fit:cover;object-position:left top}
+.s-black{background:#0E0E0E}
+.s-case{background:#E9E9E6}.s-case .cd{position:relative;width:78%;aspect-ratio:1}
+.s-case .cd img{position:absolute;inset:0;width:100%;height:100%;object-fit:contain}
+.s-case .cd img.d{left:52.86%;top:50.27%;width:75%;height:auto;inset:auto;transform:translate(-50%,-50%);border-radius:50%}
+.s-tv{background:#F3F3F1}.s-tv img{object-fit:contain;padding:18px}
+.meta{position:absolute;left:24px;right:24px;bottom:22px;display:flex;justify-content:space-between;font-family:'JetBrains Mono',monospace;font-size:12px;letter-spacing:.06em;color:#fff;opacity:.9}
+
+#modes{position:fixed;top:20px;left:50%;transform:translateX(-50%);z-index:20;display:flex;gap:6px;background:#fff;border-radius:999px;padding:5px;box-shadow:0 6px 24px rgba(14,14,14,.18)}
+#modes button{border:0;border-radius:999px;background:transparent;font:600 13px Inter,sans-serif;padding:0 14px;min-height:40px;cursor:pointer;color:#0E0E0E}
+#modes button[aria-pressed="true"]{background:#0E0E0E;color:#fff}
+#replay{position:fixed;right:20px;bottom:20px;z-index:20;border:1px solid rgba(14,14,14,.2);background:#fff;color:var(--ink);font:600 13px 'Inter',sans-serif;border-radius:999px;padding:0 16px;min-height:44px;cursor:pointer;opacity:0;transition:opacity .3s}
+#replay.show{opacity:1}
+.note{position:fixed;left:20px;bottom:80px;z-index:20;font-family:'JetBrains Mono',monospace;font-size:11px;color:#6B6B6B;opacity:0;transition:opacity .3s;max-width:60vw}
+.note.show{opacity:1}
+@media (max-width:640px){.copy{top:20vh}.portrait{height:66vh;right:-28vh;bottom:0}.top .s,.avail{font-size:12px}.right .avail{display:none}}
+</style>
+</head>
+<body>
+<main id="page" aria-label="Homepage hero">
+  <div class="top">
+    <div><b>Based in Lagos</b><span class="s">Working worldwide, remote</span></div>
+    <div class="right"><span class="avail"><i></i>Open to senior and founding roles</span><a class="cta" href="#">Get in touch</a></div>
+  </div>
+  <img class="portrait" src="portrait.webp" alt="Collins Nwaoyo">
+  <div class="copy">
+    <div class="stack">
+      <span class="line small"><span>A senior product</span></span>
+      <span class="line"><span><h1>Designer.</h1></span></span>
+      <span class="line small r"><span>who also <em>ships.</em></span></span>
+    </div>
+    <p class="sub">Nine years turning messy, rule-heavy products into simple ones. Fintech, proptech, compliance and AI tools. Now I build them too.</p>
+  </div>
+  <div class="dock"><span class="n"><b>Collins Nwaoyo</b><span>PRODUCT DESIGNER, BUILDER, ILLUSTRATOR</span></span><button type="button" aria-label="Open menu">&#9776;</button></div>
+</main>
+
+<div id="loader" aria-hidden="true">
+  <div class="meta"><span>COLLINS NWAOYO</span><span id="count">000</span></div>
+</div>
+
+<div id="win" aria-hidden="true">
+    <div class="slide s-dash"><img src="dash.jpg" alt=""></div>
+    <div class="slide s-face"><img src="face.webp" alt=""></div>
+    <div class="slide s-black"></div>
+    <div class="slide s-case"><div class="cd"><img src="case.webp" alt=""><img class="d" src="disc.webp" alt=""></div></div>
+    <div class="slide s-tv"><img src="tv.webp" alt=""></div>
+  </div>
+<div id="modes" role="group" aria-label="Intro version">
+  <button type="button" data-mode="A" aria-pressed="true">A: frame expands</button>
+  <button type="button" data-mode="B" aria-pressed="false">B: closer to the reference</button>
+</div>
+<button id="replay" type="button">Replay intro</button>
+<p class="note" id="note"></p>
+
+<script>
+(function(){
+  var HOP='cubic-bezier(0.9,0,0.1,1)', OUT='cubic-bezier(0.215,0.61,0.355,1)';
+  var page=document.getElementById('page'), win=document.getElementById('win'), loader=document.getElementById('loader'), meta=document.querySelector('.meta');
+  var slides=[].slice.call(document.querySelectorAll('.slide')), count=document.getElementById('count');
+  var order={A:['s-dash','s-face','s-black','s-case','s-tv'],B:['s-dash','s-black','s-case','s-tv','s-face']};
+  var lines=[].slice.call(document.querySelectorAll('.line > span')), sub=document.querySelector('.sub'), dock=document.querySelector('.dock'), portrait=document.querySelector('.portrait');
+  var replay=document.getElementById('replay'), note=document.getElementById('note');
+  var reduce=window.matchMedia('(prefers-reduced-motion: reduce)').matches, mode='A';
+  var notes={A:'A: blue, five quick frames, then the white frame becomes the page. About 2.6 seconds.',B:'B: the frame grows with each picture, lands on your face, then the blue lifts like a curtain and the face hands over to the portrait. About 3.3 seconds.'};
+  var timers=[], anims=[], raf=0;
+  function after(ms,fn){timers.push(setTimeout(fn,ms))}
+  function anim(el,k,o){var a=el.animate(k,Object.assign({fill:'forwards'},o));anims.push(a);return a}
+  function winInset(){var w=220,h=280,vw=innerWidth,vh=innerHeight;return 'inset('+((vh-h)/2)+'px '+((vw-w)/2)+'px '+((vh-h)/2)+'px '+((vw-w)/2)+'px)'}
+  function show(cls){slides.forEach(function(o){o.classList.toggle('on',o.classList.contains(cls))})}
+  function counter(total){var t0=performance.now();cancelAnimationFrame(raf);(function tick(){var p=Math.min(1,(performance.now()-t0)/total);count.textContent=String(Math.round(p*100)).padStart(3,'0');if(p<1)raf=requestAnimationFrame(tick)})()}
+  function reset(){
+    timers.forEach(clearTimeout);timers=[];anims.forEach(function(a){a.cancel()});anims=[];cancelAnimationFrame(raf);
+    page.style.clipPath='';win.style.clipPath='inset(50% 50% 50% 50%)';win.style.visibility='';win.style.transform='';win.style.opacity='';
+    loader.style.display='';loader.style.background='';loader.style.clipPath='';meta.style.opacity='';
+    slides.forEach(function(s){s.classList.remove('on')});count.textContent='000';
+    replay.classList.remove('show');note.classList.remove('show');
+    lines.forEach(function(l){l.style.transform=''});sub.style.opacity='';dock.style.transform='';portrait.style.opacity='';
+  }
+  function heroIn(base){
+    lines.forEach(function(l,i){anim(l,[{transform:'translateY(110%)'},{transform:'translateY(0)'}],{duration:1000,delay:base+i*90,easing:OUT})});
+    anim(sub,[{opacity:0,transform:'translateY(12px)'},{opacity:1,transform:'translateY(0)'}],{duration:700,delay:base+380,easing:OUT});
+    anim(dock,[{transform:'translate(-50%,200%)'},{transform:'translate(-50%,0)'}],{duration:800,delay:base+630,easing:OUT});
+  }
+  function done(at){after(at,function(){replay.classList.add('show');note.textContent=notes[mode];note.classList.add('show')})}
+  function runA(){
+    page.style.clipPath='inset(50% 50% 50% 50%)';
+    anim(win,[{clipPath:'inset(50% 50% 50% 50%)'},{clipPath:'inset(0% 0% 0% 0%)'}],{duration:500,easing:HOP});
+    counter(1900);
+    var FLIP=170, seq=order.A;
+    seq.forEach(function(c,i){after(120+i*FLIP,function(){show(c)})});
+    var end=120+seq.length*FLIP;
+    after(end,function(){page.style.clipPath=winInset();win.style.visibility='hidden'});
+    after(end+260,function(){
+      anim(page,[{clipPath:winInset()},{clipPath:'inset(0px 0px 0px 0px)'}],{duration:1000,easing:HOP});
+      anim(meta,[{opacity:.9},{opacity:0}],{duration:300});
+      heroIn(520);
+    });
+    after(end+1300,function(){loader.style.display='none'});
+    done(end+2600);
+  }
+  function runB(){
+    loader.style.background='var(--blue)'; page.style.clipPath='inset(0)';
+    portrait.style.opacity=0;
+    anim(win,[{clipPath:'inset(50% 50% 50% 50%)'},{clipPath:'inset(0% 0% 0% 0%)'}],{duration:600,easing:HOP});
+    win.style.transform='scale(.6)';
+    counter(2000);
+    var FLIP=300, seq=order.B, scales=[.6,.7,.8,.9,1];
+    seq.forEach(function(c,i){after(150+i*FLIP,function(){
+      show(c);
+      anim(win,[{transform:'scale('+(scales[i-1]||.6)+')'},{transform:'scale('+scales[i]+')'}],{duration:420,easing:OUT});
+    })});
+    var end=150+seq.length*FLIP+250;
+    after(end,function(){
+      // blue lifts like a curtain
+      anim(loader,[{clipPath:'inset(0 0 0% 0)'},{clipPath:'inset(0 0 100% 0)'}],{duration:1100,easing:HOP});
+      // the face hands over to the portrait on the right
+      var dx=innerWidth*0.36, dy=-innerHeight*0.02;
+      anim(win,[{transform:'translate(0,0) scale(1)',opacity:1},{transform:'translate('+dx+'px,'+dy+'px) scale(1.35)',opacity:0}],{duration:1100,easing:HOP});
+      anim(portrait,[{opacity:0},{opacity:1}],{duration:700,delay:450,easing:'linear'});
+      heroIn(560);
+    });
+    after(end+1200,function(){loader.style.display='none';win.style.visibility='hidden'});
+    done(end+2500);
+  }
+  function run(){
+    reset();
+    if(reduce){page.style.clipPath='inset(0)';loader.style.display='none';win.style.visibility='hidden';lines.forEach(function(l){l.style.transform='none'});sub.style.opacity=1;dock.style.transform='translate(-50%,0)';replay.classList.add('show');return}
+    (mode==='A'?runA:runB)();
+  }
+  replay.addEventListener('click',run);
+  [].slice.call(document.querySelectorAll('#modes button')).forEach(function(b){b.addEventListener('click',function(){
+    mode=b.dataset.mode;document.querySelectorAll('#modes button').forEach(function(o){o.setAttribute('aria-pressed',o===b?'true':'false')});run();
+  })});
+  var imgs=[].slice.call(document.images),left=imgs.length;
+  function ready(){if(--left<=0)run()}
+  imgs.forEach(function(im){if(im.complete)ready();else{im.addEventListener('load',ready);im.addEventListener('error',ready)}});
+})();
+</script>
+</body>
+</html>

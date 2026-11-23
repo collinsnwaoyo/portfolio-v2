@@ -1,0 +1,26 @@
+:root {
+  --ink: #0e0e0e;
+  --paper: #ffffff;
+  --panel: #f3f3f1;
+  --accent: #2440ff;
+  --accent-on-dark: #8c9bff;
+  --muted: #6b6b6b;
+  --muted-display: #767676;
+  --muted-on-dark: #8e8e8e;
+  --ok: #2f8a52;
+
+  --radius-sm: 12px;
+  --radius-md: 16px;
+  --radius-lg: 20px;
+  --radius-pill: 999px;
+
+  --gutter: 48px;
+  --section-y: 112px;
+}
+
+@media (max-width: 640px) {
+  :root {
+    --gutter: 20px;
+    --section-y: 52px;
+  }
+}
