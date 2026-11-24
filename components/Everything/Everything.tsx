@@ -7,6 +7,7 @@ export default function Everything() {
 
   return (
     <section id="everything" aria-label="All work" className={styles.everything}>
+      <div className="page-container">
       <div className={styles.header}>
         <div>
           <p className={styles.eyebrow}>ALL WORK</p>
@@ -58,6 +59,7 @@ export default function Everything() {
       <p className={styles.note}>
         Filtering and hover states land in the next phase; this view shows everything.
       </p>
+      </div>
     </section>
   );
 }

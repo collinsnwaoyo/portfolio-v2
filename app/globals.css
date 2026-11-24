@@ -8,6 +8,11 @@ html,
 body {
   margin: 0;
   padding: 0;
+  /* Belt-and-suspenders: the marquee and the mobile card rail are
+     deliberately wider than the viewport (they scroll internally), and
+     without this Chromium sometimes still reports that width on the
+     document itself. */
+  overflow-x: hidden;
 }
 
 body {
@@ -19,4 +24,14 @@ body {
 code,
 pre {
   font-family: var(--font-mono), monospace;
+}
+
+/* Shared content column: every section's header and body line up inside
+   this on wide screens instead of stretching to the viewport edge. */
+.page-container {
+  width: 100%;
+  max-width: 1600px;
+  margin-inline: auto;
+  padding-inline: var(--gutter);
+  box-sizing: border-box;
 }

@@ -4,6 +4,7 @@ import { site } from '../../content/content';
 export default function Contact() {
   return (
     <section id="contact" className={styles.section} aria-labelledby="contact-heading">
+      <div className="page-container">
       <p className={styles.eyebrow}>04 / CONTACT</p>
       <h2 id="contact-heading" className={styles.title}>
         Let&rsquo;s build.
@@ -37,6 +38,7 @@ export default function Contact() {
       <div className={styles.footer}>
         <span>© 2026 {site.name.toUpperCase()}</span>
         <span>DESIGNED AND BUILT BY ME, IN LAGOS</span>
+      </div>
       </div>
     </section>
   );

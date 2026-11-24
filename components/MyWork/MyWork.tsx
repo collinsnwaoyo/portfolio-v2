@@ -47,11 +47,10 @@ export default function MyWork() {
 
   return (
     <section id="work" className={styles.work} aria-label="My work">
+      <div className="page-container">
       <div className={styles.header}>
         <div>
-          <p className={styles.eyebrow} data-testid="font-mono">
-            01 / THE WORK
-          </p>
+          <p className={styles.eyebrow}>01 / THE WORK</p>
           <h2 className={styles.title}>My work.</h2>
         </div>
         <p className={styles.desc}>
@@ -111,6 +110,7 @@ export default function MyWork() {
         <p className={styles.scrollMore}>
           Scroll for more work <span aria-hidden="true">↓</span>
         </p>
+      </div>
       </div>
 
       <div className={styles.bodyMobile}>

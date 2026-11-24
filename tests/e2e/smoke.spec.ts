@@ -34,7 +34,9 @@ test('is noindex with a canonical link to the current site', async ({ page }) =>
 
 test('all six homepage sections are present', async ({ page }) => {
   await page.goto('./');
-  await expect(page.getByRole('heading', { level: 1 })).toContainText('Designer.');
+  await expect(page.getByRole('heading', { level: 1 })).toContainText(
+    'senior product designer who also ships'
+  );
   await expect(page.locator('#work')).toContainText('My work.');
   await expect(page.locator('#everything')).toContainText('Everything.');
   await expect(page.getByText('Twenty-plus products, one method')).toBeVisible();
@@ -51,6 +53,18 @@ test('everything grid shows all 14 items with the right filter counts', async ({
   await expect(page.locator('#everything li')).toHaveCount(14);
 });
 
+test('the top of My work peeks into the first screen', async ({ page }) => {
+  await page.goto('./');
+  const workTitle = page.locator('#work').getByText('My work.');
+  const box = await workTitle.boundingBox();
+  const viewport = page.viewportSize();
+  expect(box).not.toBeNull();
+  expect(viewport).not.toBeNull();
+  if (box && viewport) {
+    expect(box.y).toBeLessThan(viewport.height);
+  }
+});
+
 test('dock menu opens, traps focus, and closes on Escape', async ({ page }) => {
   await page.goto('./');
   const toggle = page.getByRole('button', { name: 'Open menu' });
@@ -63,12 +77,4 @@ test('dock menu opens, traps focus, and closes on Escape', async ({ page }) => {
   await page.keyboard.press('Escape');
   await expect(menu).toBeHidden();
   await expect(page.getByRole('button', { name: 'Open menu' })).toBeFocused();
-});
-
-test('screenshot', async ({ page }, testInfo) => {
-  await page.goto('./');
-  await page.screenshot({
-    path: `test-results/screenshot-${testInfo.project.name}.png`,
-    fullPage: true,
-  });
 });

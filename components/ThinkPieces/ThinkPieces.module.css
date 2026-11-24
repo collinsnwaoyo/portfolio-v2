@@ -1,5 +1,5 @@
 .section {
-  padding: 100px 48px;
+  padding: 100px 0;
   background: var(--panel);
   color: var(--ink);
 }
@@ -62,7 +62,7 @@
 
 @media (max-width: 640px) {
   .section {
-    padding: 52px 20px;
+    padding: 52px 0;
   }
 
   .grid {

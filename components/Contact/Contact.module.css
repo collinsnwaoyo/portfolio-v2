@@ -1,5 +1,5 @@
 .section {
-  padding: 120px 48px 160px;
+  padding: 120px 0 160px;
   background: var(--paper);
   color: var(--ink);
 }
@@ -68,7 +68,7 @@
 
 @media (max-width: 640px) {
   .section {
-    padding: 56px 20px 120px;
+    padding: 56px 0 120px;
   }
 
   .title {

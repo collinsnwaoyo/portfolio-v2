@@ -9,7 +9,7 @@
 }
 
 .work {
-  padding: 80px 48px 110px;
+  padding: 80px 0 110px;
   background: var(--panel);
 }
 
@@ -50,6 +50,12 @@
   align-items: center;
   gap: 40px;
   margin-top: 56px;
+  /* The TV (680px) and disc row (~954px) are fixed-width; below that,
+     scroll internally instead of forcing the page wider. contain stops
+     that scrollable width from leaking into the document's own. */
+  max-width: 100%;
+  overflow-x: auto;
+  contain: layout;
 }
 
 .tvWrap {
@@ -181,7 +187,6 @@
   .header {
     flex-direction: column;
     align-items: flex-start;
-    padding: 0 20px;
   }
 
   .title {
@@ -213,6 +218,9 @@
     overflow-x: auto;
     scroll-snap-type: x mandatory;
     -webkit-overflow-scrolling: touch;
+    /* Without this, the row's own scrollable width (it's deliberately
+       wider than the viewport) leaks into the document's scrollWidth. */
+    contain: layout;
   }
 
   .card {

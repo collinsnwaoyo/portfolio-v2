@@ -4,6 +4,7 @@ import { thinkPieces } from '../../content/content';
 export default function ThinkPieces() {
   return (
     <section id="think" className={styles.section} aria-label="Think pieces">
+      <div className="page-container">
       <div className={styles.grid}>
         <div>
           <p className={styles.eyebrow}>03 / THINK PIECES</p>
@@ -17,6 +18,7 @@ export default function ThinkPieces() {
             </a>
           ))}
         </div>
+      </div>
       </div>
     </section>
   );

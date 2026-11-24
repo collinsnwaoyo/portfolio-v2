@@ -3,6 +3,7 @@ import styles from './WhatIDo.module.css';
 export default function WhatIDo() {
   return (
     <section className={styles.section} aria-labelledby="what-i-do-heading">
+      <div className="page-container">
       <p className={styles.eyebrow}>02 / WHAT I DO</p>
       <h2 id="what-i-do-heading" className={styles.statement}>
         <span className={styles.muted}>Logistics, energy, betting, compliance, AI, property.</span>{' '}
@@ -46,6 +47,7 @@ export default function WhatIDo() {
             20+ client products since 2021
           </p>
         </div>
+      </div>
       </div>
     </section>
   );
