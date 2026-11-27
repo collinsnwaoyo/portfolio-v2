@@ -130,11 +130,36 @@
   text-decoration: none;
   color: inherit;
   border-radius: var(--radius-md);
+  cursor: pointer;
 }
 
 .discLink:focus-visible {
   outline: 2px solid var(--accent);
   outline-offset: 4px;
+}
+
+.discStage {
+  display: inline-flex;
+  transition:
+    transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1),
+    filter 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.discLink:hover .discStage,
+.discLink:focus-visible .discStage {
+  transform: scale(1.06) translateY(-6px);
+  filter: drop-shadow(0 20px 28px rgba(14, 14, 14, 0.3));
+}
+
+.discLink:active .discStage {
+  transform: scale(0.98);
+  transition-duration: 0.12s;
+  transition-timing-function: ease-out;
+}
+
+.discLink:hover .discCase,
+.discLink:focus-visible .discCase {
+  animation-play-state: paused;
 }
 
 .discCase {
@@ -157,6 +182,12 @@
   height: auto;
   transform: translate(-50%, -50%);
   border-radius: 50%;
+  transition: transform 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.discLink:hover .discImg,
+.discLink:focus-visible .discImg {
+  transform: translate(calc(-50% + 12%), -50%);
 }
 
 .nowPlaying {
@@ -169,6 +200,35 @@
   font-family: var(--font-mono), monospace;
   font-size: 12px;
   color: var(--muted);
+  transition: color 0.3s cubic-bezier(0.215, 0.61, 0.355, 1);
+}
+
+.discLink:hover .discLabel,
+.discLink:focus-visible .discLabel {
+  color: var(--accent);
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .discCase {
+    animation: none;
+  }
+
+  .discStage,
+  .discImg {
+    transition: none;
+  }
+
+  .discLink:hover .discStage,
+  .discLink:focus-visible .discStage,
+  .discLink:active .discStage {
+    transform: none;
+    filter: none;
+  }
+
+  .discLink:hover .discImg,
+  .discLink:focus-visible .discImg {
+    transform: translate(-50%, -50%);
+  }
 }
 
 .discOutcome {

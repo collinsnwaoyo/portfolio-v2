@@ -89,7 +89,9 @@ export default function MyWork() {
         <ul className={styles.discRow}>
           <li className={styles.discItem}>
             <Link href={`/work/${nestwell.slug}`} className={styles.discLink}>
-              <DiscCase discImage={nestwell.discImage!} alt="" size={170} />
+              <span className={styles.discStage}>
+                <DiscCase discImage={nestwell.discImage!} alt="" size={170} />
+              </span>
               <span className={styles.nowPlaying}>● NOW PLAYING</span>
               <span className={styles.discOutcome}>{nestwell.outcome}</span>
             </Link>
@@ -97,12 +99,14 @@ export default function MyWork() {
           {rest.map((project, i) => (
             <li className={styles.discItem} key={project.slug}>
               <Link href={`/work/${project.slug}`} className={styles.discLink}>
-                <DiscCase
-                  discImage={project.discImage!}
-                  alt=""
-                  size={170}
-                  floatDelay={`-${1.6 + i}s`}
-                />
+                <span className={styles.discStage}>
+                  <DiscCase
+                    discImage={project.discImage!}
+                    alt=""
+                    size={170}
+                    floatDelay={`-${1.6 + i}s`}
+                  />
+                </span>
                 <span className={styles.discLabel}>
                   {String(i + 2).padStart(2, '0')}{' '}
                   {(project.shortTitle ?? project.title).toUpperCase()}
