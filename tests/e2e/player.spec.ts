@@ -60,7 +60,7 @@ test('mobile: tapping the Nestwell card opens a full-screen player with its own 
   await page.getByRole('button', { name: /Play the walkthrough for/ }).click();
   await expect(page).toHaveURL(/\?play=nestwell/);
 
-  const dialog = page.getByRole('dialog');
+  const dialog = page.getByRole('dialog', { name: 'Nestwell clip' });
   await expect(dialog).toBeVisible();
   await expect(dialog.getByRole('button', { name: 'Close' })).toBeVisible();
 

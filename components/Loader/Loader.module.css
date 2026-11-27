@@ -1,0 +1,125 @@
+.loader {
+  position: fixed;
+  inset: 0;
+  z-index: 500;
+  background: var(--accent);
+  pointer-events: none;
+}
+
+.win {
+  position: fixed;
+  z-index: 501;
+  left: 50%;
+  top: 50%;
+  width: 220px;
+  height: 280px;
+  margin: -140px 0 0 -110px;
+  overflow: hidden;
+  transform-origin: center center;
+  pointer-events: none;
+}
+
+.slide {
+  position: absolute;
+  inset: 0;
+  display: none;
+  align-items: center;
+  justify-content: center;
+}
+.slide.on {
+  display: flex;
+}
+.slide img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+.sDash {
+  background: var(--panel);
+}
+.sDash img {
+  object-position: left top;
+}
+.sBlack {
+  background: var(--ink);
+}
+.sCase {
+  background: #e9e9e6;
+}
+.sCase .cd {
+  position: relative;
+  width: 78%;
+  aspect-ratio: 1;
+}
+.sCase .cd img {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: contain;
+}
+.sCase .cd img.disc {
+  left: 52.86%;
+  top: 50.27%;
+  width: 75%;
+  height: auto;
+  inset: auto;
+  transform: translate(-50%, -50%);
+  border-radius: 50%;
+}
+.sTv {
+  background: var(--panel);
+}
+.sTv img {
+  object-fit: contain;
+  padding: 18px;
+}
+.sFace img {
+  object-fit: cover;
+}
+
+.meta {
+  position: fixed;
+  left: 24px;
+  right: 24px;
+  bottom: 22px;
+  z-index: 502;
+  display: flex;
+  justify-content: space-between;
+  font-family: var(--font-mono), monospace;
+  font-size: 12px;
+  letter-spacing: 0.06em;
+  color: #fff;
+  opacity: 0.9;
+}
+
+.skip {
+  position: fixed;
+  right: 20px;
+  top: 20px;
+  z-index: 503;
+  border: 1px solid rgba(255, 255, 255, 0.4);
+  background: transparent;
+  color: #fff;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 600;
+  font-size: 13px;
+  border-radius: var(--radius-pill);
+  padding: 0 16px;
+  min-height: 40px;
+  cursor: pointer;
+  pointer-events: auto;
+}
+.skip:focus-visible {
+  outline: 2px solid #fff;
+  outline-offset: 2px;
+}
+
+@media (prefers-reduced-motion: reduce) {
+  .loader,
+  .win,
+  .meta,
+  .skip {
+    display: none;
+  }
+}

@@ -4,13 +4,15 @@ import { useState } from 'react';
 import Link from 'next/link';
 import styles from './Everything.module.css';
 import { projects, getProjectCounts, type ProjectKind } from '../../content/content';
+import { nestwellCaseStudy, stubCaseStudies } from '../../content/caseStudies';
 import DeviceCover, { LockTag } from './DeviceCover';
+import Reveal from '../Reveal/Reveal';
 
 type Filter = 'all' | ProjectKind;
 
 // Only projects with a built case study page get a real link; the rest
 // stay as inert placeholder tiles until their own page exists.
-const HAS_CASE_STUDY = new Set(['nestwell']);
+const HAS_CASE_STUDY = new Set([nestwellCaseStudy.slug, ...stubCaseStudies.map((s) => s.slug)]);
 
 const FILTERS: { value: Filter; label: string }[] = [
   { value: 'all', label: 'All' },
@@ -28,13 +30,13 @@ export default function Everything() {
       <div className="page-container">
       <div className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>ALL WORK</p>
-          <h2 className={styles.title}>Everything.</h2>
-          <p className={styles.desc}>
+          <Reveal as="p" className={styles.eyebrow}>ALL WORK</Reveal>
+          <Reveal as="h2" delayMs={80} className={styles.title}>Everything.</Reveal>
+          <Reveal as="p" delayMs={160} className={styles.desc}>
             Most of what I design lives behind a login: internal tools, compliance systems,
             client platforms. Case studies here are anonymised. I can walk you through more on a
             call.
-          </p>
+          </Reveal>
         </div>
         <div role="tablist" aria-label="Filter work" className={styles.tabs}>
           {FILTERS.map(({ value, label }) => (

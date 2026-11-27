@@ -1,14 +1,15 @@
 import styles from './Contact.module.css';
 import { site } from '../../content/content';
+import Reveal from '../Reveal/Reveal';
 
 export default function Contact() {
   return (
     <section id="contact" className={styles.section} aria-labelledby="contact-heading">
       <div className="page-container">
-      <p className={styles.eyebrow}>04 / CONTACT</p>
-      <h2 id="contact-heading" className={styles.title}>
+      <Reveal as="p" className={styles.eyebrow}>04 / CONTACT</Reveal>
+      <Reveal as="h2" delayMs={80} id="contact-heading" className={styles.title}>
         Let&rsquo;s build.
-      </h2>
+      </Reveal>
       <div className={styles.links}>
         <div>
           <p className={styles.label}>EMAIL</p>

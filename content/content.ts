@@ -174,13 +174,39 @@ export function getProjectCounts() {
 export interface ThinkPiece {
   slug: string;
   title: string;
+  date: string;
+  /**
+   * Stopgap until Collins writes the full piece (a PRD open item): a short,
+   * honest stand-in rather than fabricated essay text.
+   */
+  stubNote: string;
 }
 
 export const thinkPieces: ThinkPiece[] = [
-  { slug: 'design-is-the-discipline-of-installing-rules', title: 'Design is the discipline of installing rules.' },
-  { slug: 'the-autopilot-has-always-been-there', title: 'The autopilot has always been there. The pilot still matters.' },
-  { slug: 'a-design-system-is-a-contract', title: 'A design system is a contract, not a component library.' },
-  { slug: 'handoff-is-not-a-moment', title: 'Handoff is not a moment. It is a process.' },
+  {
+    slug: 'design-is-the-discipline-of-installing-rules',
+    title: 'Design is the discipline of installing rules.',
+    date: '2026-01',
+    stubNote: 'The full piece is still being written — happy to talk through the idea on a call in the meantime.',
+  },
+  {
+    slug: 'the-autopilot-has-always-been-there',
+    title: 'The autopilot has always been there. The pilot still matters.',
+    date: '2026-01',
+    stubNote: 'The full piece is still being written — happy to talk through the idea on a call in the meantime.',
+  },
+  {
+    slug: 'a-design-system-is-a-contract',
+    title: 'A design system is a contract, not a component library.',
+    date: '2026-02',
+    stubNote: 'The full piece is still being written — happy to talk through the idea on a call in the meantime.',
+  },
+  {
+    slug: 'handoff-is-not-a-moment',
+    title: 'Handoff is not a moment. It is a process.',
+    date: '2026-02',
+    stubNote: 'The full piece is still being written — happy to talk through the idea on a call in the meantime.',
+  },
 ];
 
 export const site = {

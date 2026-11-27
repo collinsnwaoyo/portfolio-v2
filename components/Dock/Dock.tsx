@@ -52,7 +52,7 @@ export default function Dock() {
       {open && (
         <div className={styles.overlay} onClick={() => setOpen(false)} aria-hidden="true" />
       )}
-      <nav className={styles.dock} aria-label="Site">
+      <nav className={styles.dock} aria-label="Site" data-reveal="dock">
         <span className={styles.identity}>
           <span className={styles.name}>{site.name}</span>
           <span className={styles.role}>{site.role.toUpperCase()}</span>

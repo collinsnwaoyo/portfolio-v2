@@ -6,6 +6,7 @@ import styles from './MyWork.module.css';
 import { getFeaturedProjects } from '../../content/content';
 import { asset } from '../../lib/paths';
 import Player, { type PlayerHandle } from '../Player/Player';
+import Reveal from '../Reveal/Reveal';
 
 function DiscCase({
   discImage,
@@ -93,12 +94,12 @@ export default function MyWork() {
       <div className="page-container">
       <div className={styles.header}>
         <div>
-          <p className={styles.eyebrow}>01 / THE WORK</p>
-          <h2 className={styles.title}>My work.</h2>
+          <Reveal as="p" className={styles.eyebrow}>01 / THE WORK</Reveal>
+          <Reveal as="h2" delayMs={80} className={styles.title}>My work.</Reveal>
         </div>
-        <p className={styles.desc}>
+        <Reveal as="p" delayMs={160} className={styles.desc}>
           My top five. Tap a case for a 30-second walkthrough, in my own voice.
-        </p>
+        </Reveal>
       </div>
 
       <div className={styles.bodyDesktop}>

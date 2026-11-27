@@ -43,11 +43,27 @@ async function main() {
       args: [`--remote-debugging-port=${DEBUG_PORT}`],
     });
 
+    // Mark the intro loader as already played, same as any returning
+    // visitor: otherwise Lighthouse's snapshot can land mid-entrance-
+    // animation (dock/hero fading in) and flag a transient, not a real,
+    // contrast issue. disableStorageReset below keeps this in place.
+    const warmup = await browser.newPage();
+    await warmup.goto(URL_TO_TEST);
+    await warmup.evaluate(() => {
+      try {
+        localStorage.setItem('loader-played', '1');
+      } catch {
+        /* ignore */
+      }
+    });
+    await warmup.close();
+
     const result = await lighthouse(URL_TO_TEST, {
       port: DEBUG_PORT,
       output: 'json',
       onlyCategories: Object.keys(BUDGETS),
       logLevel: 'error',
+      disableStorageReset: true,
     });
 
     const { categories } = result.lhr;

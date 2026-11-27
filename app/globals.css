@@ -26,6 +26,14 @@ pre {
   font-family: var(--font-mono), monospace;
 }
 
+/* Hidden until the intro loader (or its instant skip) reveals them, so
+   there is no flash of the hero before the loader's handover. Set by the
+   blocking script in the document head, before first paint. */
+:root[data-loader='pending'] #hero-photo,
+:root[data-loader='pending'] [data-reveal] {
+  opacity: 0;
+}
+
 /* Shared content column: every section's header and body line up inside
    this on wide screens instead of stretching to the viewport edge. */
 .page-container {

@@ -32,10 +32,17 @@ export async function generateMetadata({
 }): Promise<Metadata> {
   const { slug } = await params;
   if (slug === nestwellCaseStudy.slug) {
-    return { title: `${nestwellCaseStudy.title.replace(/\.$/, '')} — Collins Nwaoyo` };
+    return {
+      title: `${nestwellCaseStudy.title.replace(/\.$/, '')} — Collins Nwaoyo`,
+      description: `${nestwellCaseStudy.intro}${nestwellCaseStudy.introAccent}`,
+    };
   }
-  if (STUB_SLUGS.has(slug)) {
-    return { title: `${projectTitleFor(slug)} — Collins Nwaoyo` };
+  const stubProject = projects.find((p) => p.slug === slug);
+  if (STUB_SLUGS.has(slug) && stubProject) {
+    return {
+      title: `${projectTitleFor(slug)} — Collins Nwaoyo`,
+      description: `${stubProject.outcome}.`,
+    };
   }
   return { title: 'Case study' };
 }

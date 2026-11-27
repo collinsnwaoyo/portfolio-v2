@@ -48,21 +48,32 @@ function resolveFile(urlPath) {
 
 export function createServer() {
   return http.createServer((req, res) => {
-    const filePath = resolveFile(req.url || '/');
+    let filePath = resolveFile(req.url || '/');
+    let status = 200;
+
+    // GitHub Pages serves the site's 404.html (with a real 404 status) for
+    // any unmatched path; mirror that here instead of a bare text response.
+    if (!filePath) {
+      status = 404;
+      const notFound = join(ROOT, '404.html');
+      filePath = existsSync(notFound) ? notFound : null;
+    }
+
     if (!filePath) {
       res.writeHead(404, { 'Content-Type': 'text/plain' });
       res.end('404 Not Found');
       return;
     }
+
     const ext = extname(filePath);
     const type = MIME[ext] || 'application/octet-stream';
     const acceptsGzip = (req.headers['accept-encoding'] || '').includes('gzip');
 
     if (COMPRESSIBLE.has(ext) && acceptsGzip) {
-      res.writeHead(200, { 'Content-Type': type, 'Content-Encoding': 'gzip' });
+      res.writeHead(status, { 'Content-Type': type, 'Content-Encoding': 'gzip' });
       createReadStream(filePath).pipe(createGzip()).pipe(res);
     } else {
-      res.writeHead(200, { 'Content-Type': type });
+      res.writeHead(status, { 'Content-Type': type });
       createReadStream(filePath).pipe(res);
     }
   });

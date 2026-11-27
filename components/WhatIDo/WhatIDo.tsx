@@ -1,15 +1,16 @@
 import styles from './WhatIDo.module.css';
+import Reveal from '../Reveal/Reveal';
 
 export default function WhatIDo() {
   return (
     <section className={styles.section} aria-labelledby="what-i-do-heading">
       <div className="page-container">
-      <p className={styles.eyebrow}>02 / WHAT I DO</p>
-      <h2 id="what-i-do-heading" className={styles.statement}>
+      <Reveal as="p" className={styles.eyebrow}>02 / WHAT I DO</Reveal>
+      <Reveal as="h2" delayMs={80} className={styles.statement} id="what-i-do-heading">
         <span className={styles.muted}>Logistics, energy, betting, compliance, AI, property.</span>{' '}
         Twenty-plus products, one method: the rules a product runs on, then the screens,{' '}
         <span className={styles.accent}>then the code.</span>
-      </h2>
+      </Reveal>
       <div className={styles.columns}>
         <div className={styles.column}>
           <p className={styles.columnLabel}>DESIGN</p>

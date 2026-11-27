@@ -84,10 +84,10 @@ export default function Hero() {
       </div>
 
       <div className={styles.below}>
-        <h1 className={styles.kicker} data-testid="font-mono">
+        <h1 className={styles.kicker} data-testid="font-mono" data-reveal="kicker">
           A senior product designer who also ships
         </h1>
-        <p className={styles.sub} data-testid="font-body">
+        <p className={styles.sub} data-testid="font-body" data-reveal="sub">
           Nine years turning messy, rule-heavy products into simple ones. Fintech, proptech,
           compliance and AI tools. Now I build them too.
         </p>
