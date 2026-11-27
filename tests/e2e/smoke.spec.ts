@@ -53,6 +53,32 @@ test('everything grid shows all 14 items with the right filter counts', async ({
   await expect(page.locator('#everything li')).toHaveCount(14);
 });
 
+test('filtering never reshuffles tiles and keeps hidden ones keyboard-inert', async ({ page }) => {
+  await page.goto('./');
+  const tiles = page.locator('#everything li');
+  await expect(tiles).toHaveCount(14);
+  const order = await tiles.evaluateAll((els) => els.map((el) => el.textContent));
+
+  const projectsTab = page.getByRole('tab', { name: 'Projects 9' });
+  await projectsTab.click();
+  await expect(projectsTab).toHaveAttribute('aria-selected', 'true');
+
+  // same 14 tiles, same order: filtering fades, it never reshuffles or removes.
+  await expect(tiles).toHaveCount(14);
+  expect(await tiles.evaluateAll((els) => els.map((el) => el.textContent))).toEqual(order);
+
+  const snippetLi = page.getByText('The CD player', { exact: true }).locator('xpath=ancestor::li[1]');
+  expect(await snippetLi.evaluate((el) => (el as HTMLLIElement).inert)).toBe(true);
+
+  const nestwellLi = page
+    .locator('#everything')
+    .getByText('Nestwell', { exact: true })
+    .locator('xpath=ancestor::li[1]');
+  expect(await nestwellLi.evaluate((el) => (el as HTMLLIElement).inert)).toBe(false);
+  await nestwellLi.locator('button').focus();
+  await expect(nestwellLi.locator('button')).toBeFocused();
+});
+
 test('the top of My work peeks into the first screen', async ({ page }) => {
   await page.goto('./');
   const workTitle = page.locator('#work').getByText('My work.');

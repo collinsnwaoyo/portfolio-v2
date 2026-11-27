@@ -1,9 +1,22 @@
+'use client';
+
+import { useState } from 'react';
 import styles from './Everything.module.css';
-import { projects, getProjectCounts } from '../../content/content';
+import { projects, getProjectCounts, type ProjectKind } from '../../content/content';
 import DeviceCover, { LockTag } from './DeviceCover';
+
+type Filter = 'all' | ProjectKind;
+
+const FILTERS: { value: Filter; label: string }[] = [
+  { value: 'all', label: 'All' },
+  { value: 'project', label: 'Projects' },
+  { value: 'snippet', label: 'Snippets' },
+  { value: 'illustration', label: 'Illustration' },
+];
 
 export default function Everything() {
   const counts = getProjectCounts();
+  const [filter, setFilter] = useState<Filter>('all');
 
   return (
     <section id="everything" aria-label="All work" className={styles.everything}>
@@ -18,47 +31,60 @@ export default function Everything() {
             call.
           </p>
         </div>
-        <div
-          role="tablist"
-          aria-label="Filter work"
-          className={styles.tabs}
-        >
-          <button type="button" role="tab" aria-selected="true" className={styles.tabActive}>
-            All {counts.all}
-          </button>
-          <button type="button" role="tab" aria-selected="false" className={styles.tab}>
-            Projects {counts.project}
-          </button>
-          <button type="button" role="tab" aria-selected="false" className={styles.tab}>
-            Snippets {counts.snippet}
-          </button>
-          <button type="button" role="tab" aria-selected="false" className={styles.tab}>
-            Illustration {counts.illustration}
-          </button>
+        <div role="tablist" aria-label="Filter work" className={styles.tabs}>
+          {FILTERS.map(({ value, label }) => (
+            <button
+              key={value}
+              type="button"
+              role="tab"
+              aria-selected={filter === value}
+              className={filter === value ? styles.tabActive : styles.tab}
+              onClick={() => setFilter(value)}
+            >
+              {label} {value === 'all' ? counts.all : counts[value]}
+            </button>
+          ))}
         </div>
       </div>
 
       <ul className={styles.grid}>
-        {projects.map((project) => (
-          <li
-            key={project.slug}
-            className={styles.tile}
-            style={project.slug === 'nestwell' ? { boxShadow: '0 0 0 2px var(--accent)' } : undefined}
-          >
-            <div className={styles.tileCover}>
-              <DeviceCover project={project} />
-              <LockTag confidentiality={project.confidentiality} />
-            </div>
-            <div className={styles.tileMeta}>
-              <span className={styles.tileTitle}>{project.title}</span>
-              <span className={styles.tileKind}>{project.kind.toUpperCase()}</span>
-            </div>
-          </li>
-        ))}
+        {projects.map((project) => {
+          const matches = filter === 'all' || project.kind === filter;
+          const subtitle =
+            project.role && project.year
+              ? `${project.role.toUpperCase()} · ${project.year}`
+              : project.kind.toUpperCase();
+
+          return (
+            <li key={project.slug} className={styles.tile} inert={!matches}>
+              <button
+                type="button"
+                className={styles.tileButton}
+                style={{ opacity: matches ? 1 : 0.15 }}
+              >
+                <span className={styles.tileCover}>
+                  <span className={styles.tileCoverInner}>
+                    <DeviceCover project={project} />
+                  </span>
+                  <LockTag confidentiality={project.confidentiality} />
+                  <span className={styles.titleBar} aria-hidden="true">
+                    <span className={styles.titleBarText}>
+                      <span className={styles.titleBarName}>{project.title}</span>
+                      <span className={styles.titleBarSubtitle}>{subtitle}</span>
+                    </span>
+                    <span>&#8599;</span>
+                  </span>
+                </span>
+                <span className={styles.tileMeta}>
+                  <span className={styles.tileTitle}>{project.title}</span>
+                  <span className={styles.tileKind}>{project.kind.toUpperCase()}</span>
+                </span>
+              </button>
+            </li>
+          );
+        })}
       </ul>
-      <p className={styles.note}>
-        Filtering and hover states land in the next phase; this view shows everything.
-      </p>
+      <p className={styles.note}>Counts update from the content model as you filter.</p>
       </div>
     </section>
   );
