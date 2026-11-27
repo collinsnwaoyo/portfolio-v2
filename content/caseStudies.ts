@@ -119,3 +119,37 @@ export const nestwellCaseStudy: CaseStudy = {
       'The tool does not try to do more. It makes the one thing that needs doing today impossible to miss.',
   },
 };
+
+/**
+ * Stopgap until Phase 5: the other four featured projects don't have a
+ * written case study yet, so they get a minimal placeholder page (real
+ * outcome line, honest "coming soon" note, no fabricated metrics) rather
+ * than a dead link or a 404.
+ */
+export interface StubCaseStudy {
+  slug: string;
+  caseNumber: number;
+}
+
+export const stubCaseStudies: StubCaseStudy[] = [
+  { slug: 'liveable', caseNumber: 2 },
+  { slug: 'ai-scoping-workbench', caseNumber: 3 },
+  { slug: 'stradha', caseNumber: 4 },
+  { slug: 'design-system', caseNumber: 5 },
+];
+
+export const TOTAL_CASES = 14;
+
+/** The stopgap "Next case" loop: Nestwell -> Liveable -> AI Workbench -> Stradha -> Design System -> back to Nestwell. */
+export const NEXT_CASE_ORDER = [
+  'nestwell',
+  'liveable',
+  'ai-scoping-workbench',
+  'stradha',
+  'design-system',
+];
+
+export function nextCaseSlug(slug: string): string {
+  const i = NEXT_CASE_ORDER.indexOf(slug);
+  return NEXT_CASE_ORDER[(i + 1) % NEXT_CASE_ORDER.length];
+}

@@ -2,16 +2,27 @@ import type { Metadata } from 'next';
 import { notFound } from 'next/navigation';
 import Link from 'next/link';
 import styles from './page.module.css';
-import { nestwellCaseStudy } from '../../../content/caseStudies';
+import {
+  nestwellCaseStudy,
+  stubCaseStudies,
+  TOTAL_CASES,
+  nextCaseSlug,
+} from '../../../content/caseStudies';
+import { projects } from '../../../content/content';
 import { asset } from '../../../lib/paths';
+import type { Project } from '../../../content/content';
 
-const CASE_STUDIES = { nestwell: nestwellCaseStudy };
+const STUB_SLUGS = new Set(stubCaseStudies.map((s) => s.slug));
 
 export function generateStaticParams() {
-  return Object.keys(CASE_STUDIES).map((slug) => ({ slug }));
+  return [nestwellCaseStudy.slug, ...stubCaseStudies.map((s) => s.slug)].map((slug) => ({ slug }));
 }
 
 export const dynamicParams = false;
+
+function projectTitleFor(slug: string) {
+  return projects.find((p) => p.slug === slug)?.title ?? slug;
+}
 
 export async function generateMetadata({
   params,
@@ -19,8 +30,79 @@ export async function generateMetadata({
   params: Promise<{ slug: string }>;
 }): Promise<Metadata> {
   const { slug } = await params;
-  const study = CASE_STUDIES[slug as keyof typeof CASE_STUDIES];
-  return { title: study ? `${study.title.replace(/\.$/, '')} — Collins Nwaoyo` : 'Case study' };
+  if (slug === nestwellCaseStudy.slug) {
+    return { title: `${nestwellCaseStudy.title.replace(/\.$/, '')} — Collins Nwaoyo` };
+  }
+  if (STUB_SLUGS.has(slug)) {
+    return { title: `${projectTitleFor(slug)} — Collins Nwaoyo` };
+  }
+  return { title: 'Case study' };
+}
+
+function NextCase({ slug }: { slug: string }) {
+  const next = nextCaseSlug(slug);
+  return (
+    <Link href={`/work/${next}`} className={styles.nextCase}>
+      <span className={styles.nextCaseText}>
+        <span className={styles.nextCaseLabel}>NEXT CASE</span>
+        <span className={styles.nextCaseTitle}>{projectTitleFor(next)}</span>
+      </span>
+      <span aria-hidden="true" className={styles.nextCaseArrow}>
+        &#8594;
+      </span>
+    </Link>
+  );
+}
+
+function StatusBadge({ confidentiality }: { confidentiality: Project['confidentiality'] }) {
+  if (confidentiality === 'public') return null;
+  return (
+    <p className={styles.stubBadge}>
+      <svg aria-hidden="true" width="11" height="11" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth={2.2}>
+        <rect x="5" y="11" width="14" height="10" rx="2" />
+        <path d="M8 11V7a4 4 0 0 1 8 0v4" />
+      </svg>
+      {confidentiality === 'internal' ? 'Internal tool' : 'Under NDA'}
+    </p>
+  );
+}
+
+function StubCaseStudyPage({ slug, caseNumber }: { slug: string; caseNumber: number }) {
+  const project = projects.find((p) => p.slug === slug);
+  if (!project) notFound();
+
+  return (
+    <main className={styles.page}>
+      <section className={`page-container ${styles.titleCard}`}>
+        <div className={styles.topRow}>
+          <Link href="/#everything" className={styles.backLink}>
+            &#8592; All work
+          </Link>
+          <span className={styles.caseNumber}>
+            CASE {String(caseNumber).padStart(2, '0')} OF {TOTAL_CASES}
+          </span>
+        </div>
+
+        <div className={styles.stubGrid}>
+          <StatusBadge confidentiality={project.confidentiality} />
+          <h1 className={styles.title}>{project.title}.</h1>
+          <p className={styles.intro}>{project.outcome}.</p>
+          <p className={styles.stubNote}>
+            The full write-up for this one is still being written — happy to walk you through it
+            on a call in the meantime.
+          </p>
+        </div>
+      </section>
+
+      <section className={`page-container ${styles.outcomeSection}`}>
+        <NextCase slug={slug} />
+        <div className={styles.footer}>
+          <span>&#169; 2026 COLLINS NWAOYO</span>
+          <span>DESIGNED AND BUILT BY ME, IN LAGOS</span>
+        </div>
+      </section>
+    </main>
+  );
 }
 
 export default async function CaseStudyPage({
@@ -29,7 +111,13 @@ export default async function CaseStudyPage({
   params: Promise<{ slug: string }>;
 }) {
   const { slug } = await params;
-  const study = CASE_STUDIES[slug as keyof typeof CASE_STUDIES];
+
+  const stub = stubCaseStudies.find((s) => s.slug === slug);
+  if (stub) {
+    return <StubCaseStudyPage slug={stub.slug} caseNumber={stub.caseNumber} />;
+  }
+
+  const study = slug === nestwellCaseStudy.slug ? nestwellCaseStudy : undefined;
   if (!study) notFound();
 
   return (
@@ -197,6 +285,7 @@ export default async function CaseStudyPage({
           ))}
         </div>
         <p className={styles.closing}>{study.outcome.closing}</p>
+        <NextCase slug={study.slug} />
         <div className={styles.footer}>
           <span>&#169; 2026 COLLINS NWAOYO</span>
           <span>DESIGNED AND BUILT BY ME, IN LAGOS</span>

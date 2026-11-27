@@ -120,9 +120,21 @@
 
 .discItem {
   display: flex;
+}
+
+.discLink {
+  display: flex;
   flex-direction: column;
   align-items: center;
   gap: 10px;
+  text-decoration: none;
+  color: inherit;
+  border-radius: var(--radius-md);
+}
+
+.discLink:focus-visible {
+  outline: 2px solid var(--accent);
+  outline-offset: 4px;
 }
 
 .discCase {
@@ -235,9 +247,16 @@
     padding: 0;
     background: transparent;
     text-align: left;
+    text-decoration: none;
     font-family: var(--font-body), sans-serif;
     color: var(--ink);
     cursor: pointer;
+    border-radius: var(--radius-md);
+  }
+
+  .cardButton:focus-visible {
+    outline: 2px solid var(--accent);
+    outline-offset: 4px;
   }
 
   .srOnly {

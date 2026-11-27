@@ -1,3 +1,4 @@
+import Link from 'next/link';
 import styles from './MyWork.module.css';
 import { getFeaturedProjects } from '../../content/content';
 import { asset } from '../../lib/paths';
@@ -71,7 +72,7 @@ export default function MyWork() {
                 decoding="async"
                 className={styles.tvScreenImg}
               />
-              <span className={styles.tvCaption}>▶ PLAYING MUTED, CAPTIONS ON</span>
+              <span className={styles.tvCaption}>&#9654; NOW SHOWING: NESTWELL</span>
             </div>
           </div>
           <img
@@ -87,22 +88,27 @@ export default function MyWork() {
 
         <ul className={styles.discRow}>
           <li className={styles.discItem}>
-            <DiscCase discImage={nestwell.discImage!} alt="Nestwell disc" size={170} />
-            <span className={styles.nowPlaying}>● NOW PLAYING</span>
-            <span className={styles.discOutcome}>{nestwell.outcome}</span>
+            <Link href={`/work/${nestwell.slug}`} className={styles.discLink}>
+              <DiscCase discImage={nestwell.discImage!} alt="" size={170} />
+              <span className={styles.nowPlaying}>● NOW PLAYING</span>
+              <span className={styles.discOutcome}>{nestwell.outcome}</span>
+            </Link>
           </li>
           {rest.map((project, i) => (
             <li className={styles.discItem} key={project.slug}>
-              <DiscCase
-                discImage={project.discImage!}
-                alt={`${project.shortTitle ?? project.title} disc`}
-                size={170}
-                floatDelay={`-${1.6 + i}s`}
-              />
-              <span className={styles.discLabel}>
-                {String(i + 2).padStart(2, '0')} {(project.shortTitle ?? project.title).toUpperCase()}
-              </span>
-              <span className={styles.discOutcome}>{project.outcome}</span>
+              <Link href={`/work/${project.slug}`} className={styles.discLink}>
+                <DiscCase
+                  discImage={project.discImage!}
+                  alt=""
+                  size={170}
+                  floatDelay={`-${1.6 + i}s`}
+                />
+                <span className={styles.discLabel}>
+                  {String(i + 2).padStart(2, '0')}{' '}
+                  {(project.shortTitle ?? project.title).toUpperCase()}
+                </span>
+                <span className={styles.discOutcome}>{project.outcome}</span>
+              </Link>
             </li>
           ))}
         </ul>
@@ -117,8 +123,8 @@ export default function MyWork() {
         <ul className={styles.cardRail}>
           {featured.map((project, i) => (
             <li className={styles.card} key={project.slug}>
-              <button type="button" className={styles.cardButton}>
-                <span className={styles.srOnly}>Play the walkthrough for</span>
+              <Link href={`/work/${project.slug}`} className={styles.cardButton}>
+                <span className={styles.srOnly}>Open the case study for</span>
                 <span className={styles.cardArt}>
                   <DiscCase discImage={project.discImage!} alt="" size={230} />
                 </span>
@@ -132,7 +138,7 @@ export default function MyWork() {
                 <span className={styles.playPill} aria-hidden="true">
                   ▶ 0:30
                 </span>
-              </button>
+              </Link>
             </li>
           ))}
         </ul>
