@@ -1,0 +1,421 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Nestwell: 30-second motion brief</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Archivo:wdth,wght@62..125,400..900&family=Geist+Mono:wght@400;500&family=Inter:wght@400;500;600&display=swap" rel="stylesheet">
+<style>
+:root{
+  --ink:#0A0A0A; --paper:#F4F2EE; --signal:#FF5B1F; --soft:#5E5A55;
+  --app-bg:#F5F6F3; --app-ink:#171A16; --app-line:#E3E5E0; --app-muted:#6B6F69;
+  --green:#2F8A52; --green-bg:#E4F3E8; --red:#B8402F; --red-bg:#FCE8E4; --amber:#8A5A00; --amber-bg:#FCF0CF; --grey-bg:#ECEDEA;
+  --ease:cubic-bezier(0.22,1,0.36,1);
+}
+*{box-sizing:border-box}
+html,body{margin:0;background:#111;color:var(--paper);font-family:'Inter',system-ui,sans-serif}
+body{min-height:100vh;display:flex;flex-direction:column;align-items:center;justify-content:center;padding:24px;gap:16px}
+.wrap{width:min(1100px,100%)}
+.bezel{background:#1B1A18;padding:14px;border-radius:14px;box-shadow:0 30px 80px rgba(0,0,0,.5),inset 0 1px 0 rgba(255,255,255,.06)}
+.screen{position:relative;width:100%;aspect-ratio:16/9;overflow:hidden;background:var(--ink);border-radius:6px}
+.stage{position:absolute;left:0;top:0;width:1280px;height:720px;transform-origin:0 0}
+.scene{position:absolute;inset:0;opacity:0;pointer-events:none}
+.fx{opacity:0;transform:translateY(24px);transition:opacity 500ms var(--ease),transform 600ms var(--ease)}
+.fx.in{opacity:1;transform:none}
+.fx.pop{transform:scale(.6)}
+.fx.pop.in{transform:none}
+.fx.left{transform:translateX(-40px)}
+.fx.left.in{transform:none}
+.mono{font-family:'Geist Mono',monospace}
+.disp{font-family:'Archivo',sans-serif;font-weight:800;letter-spacing:-0.035em}
+
+/* Scene 1: title */
+#s-title{display:flex;flex-direction:column;align-items:center;justify-content:center;gap:22px;background:var(--ink)}
+#s-title .disc{width:150px;height:150px;border-radius:50%;background:conic-gradient(from 0deg,#2a2826,#5a5650,#2a2826,#77726b,#2a2826);position:relative;animation:spin 2.4s linear infinite}
+#s-title .disc::after{content:"";position:absolute;inset:58px;border-radius:50%;background:var(--signal);box-shadow:0 0 0 10px #1a1918}
+@keyframes spin{to{transform:rotate(360deg)}}
+#s-title h1{margin:0;font-size:140px;line-height:.9;color:var(--paper)}
+#s-title p{margin:0;font-size:18px;color:#A8A39C;letter-spacing:.08em}
+
+/* Scene 2: beds */
+#s-beds{background:var(--paper);color:var(--ink);padding:90px 110px}
+#s-beds .stats{display:flex;gap:70px;align-items:flex-end}
+#s-beds .stat .n{font-size:150px;line-height:.85}
+#s-beds .stat .l{font-size:18px;color:var(--soft);margin-top:12px;letter-spacing:.06em}
+#s-beds .beds{margin-top:70px;display:grid;grid-template-columns:repeat(11,1fr);gap:12px}
+.bed{height:120px;border:1.5px solid var(--ink);border-radius:8px;display:flex;flex-direction:column;justify-content:space-between;padding:12px 10px;background:#fff}
+.bed .ic{width:26px;height:14px;border:1.5px solid var(--ink);border-radius:3px}
+.bed .d{font-size:13px}
+.bed .d b{display:block;font-family:'Archivo',sans-serif;font-size:26px;font-weight:800}
+
+/* Scene 3: mess */
+#s-mess{background:#EDEAE4;color:var(--ink)}
+.sheet{position:absolute;left:90px;top:80px;width:640px;background:#fff;border:1px solid #CFCAC2;box-shadow:0 20px 50px rgba(0,0,0,.12);transform:rotate(-2.5deg)}
+.sheet .row{display:grid;grid-template-columns:150px 120px 110px 130px 1fr;border-bottom:1px solid #E2DED7;font-size:15px}
+.sheet .row div{padding:11px 12px;border-right:1px solid #E2DED7;white-space:nowrap;overflow:hidden}
+.sheet .row.h{background:#F1EFEA;font-weight:600;font-size:13px;color:#555}
+.cell-bad{transition:background 400ms,color 400ms}
+.cell-bad.in{background:var(--red-bg);color:var(--red);font-weight:600}
+.chat{position:absolute;right:90px;top:56px;width:380px;display:flex;flex-direction:column;gap:14px}
+.bub{max-width:300px;padding:12px 16px;border-radius:16px;font-size:17px;line-height:1.35;box-shadow:0 8px 24px rgba(0,0,0,.08)}
+.bub.them{background:#fff;border-top-left-radius:4px;align-self:flex-start}
+.bub.me{background:#D9FDD3;border-top-right-radius:4px;align-self:flex-end}
+.bub small{display:block;font-size:12px;color:#7a7a7a;margin-top:4px}
+.leak{position:absolute;left:110px;bottom:150px;font-size:64px;color:var(--red)}
+.rcpt{position:absolute;width:210px;background:#fff;border-radius:14px;padding:16px;box-shadow:0 16px 40px rgba(0,0,0,.16);font-family:'Inter',sans-serif;color:var(--ink)}
+.rcpt .rh{font-size:13px;color:var(--green);font-weight:600}
+.rcpt .ra{font-size:28px;font-weight:600;margin:6px 0 8px}
+.rcpt .rl{font-size:12px;color:#777;margin-top:2px}
+.rcpt.fx{transform:none}
+
+/* Scene 4: dashboard */
+#s-dash{background:var(--app-bg)}
+.cam{position:absolute;left:0;top:0;width:1280px;height:800px;transform-origin:0 0}
+.app{width:1280px;height:800px;display:grid;grid-template-columns:240px 1fr;font-family:'Inter',sans-serif;color:var(--app-ink);background:var(--app-bg)}
+.side{border-right:1px solid var(--app-line);padding:22px 16px;display:flex;flex-direction:column;gap:6px;font-size:15px}
+.brand{display:flex;align-items:center;gap:10px;font-weight:600;margin-bottom:24px}
+.brand i{width:22px;height:22px;border-radius:6px;background:var(--app-ink);display:inline-block}
+.nav{padding:9px 12px;border-radius:8px;color:#3a3d39}
+.nav.on{background:#fff;box-shadow:0 1px 2px rgba(0,0,0,.06);font-weight:500;color:var(--app-ink)}
+.side .sub{font-size:12.5px;color:var(--app-muted);margin:16px 12px 4px}
+.main{display:grid;grid-template-columns:1fr 330px;gap:28px;padding:36px 40px}
+.hello{font-size:32px;margin:0 0 26px}
+.hello b{font-weight:600}
+.card{background:#fff;border:1px solid var(--app-line);border-radius:12px;box-shadow:0 1px 2px rgba(0,0,0,.04)}
+.rev{padding:22px}
+.rev .t{font-size:15px;font-weight:500}
+.rev .v{font-size:36px;font-weight:600;color:var(--green);margin-top:6px}
+.rev svg{display:block;margin-top:14px}
+.kpis{display:grid;grid-template-columns:repeat(3,1fr);margin-top:18px}
+.kpi{padding:18px 20px;border-right:1px solid var(--app-line)}
+.kpi:last-child{border-right:0}
+.kpi .t{font-size:15px;font-weight:500}
+.kpi .v{font-size:28px;font-weight:600;margin-top:6px}
+.kpi .s{font-size:13px;color:var(--app-muted);margin-top:2px}
+.att h3,.qa h3{font-size:18px;font-weight:600;margin:52px 0 12px}
+.att .card{overflow:hidden}
+.trow{display:grid;grid-template-columns:36px minmax(0,1fr) auto;gap:12px;align-items:center;padding:13px 16px;border-bottom:1px solid var(--app-line);position:relative;transition:background 400ms}
+.trow:last-child{border-bottom:0}
+.trow.hl{background:#FFF6F2}
+.av{width:34px;height:34px;border-radius:50%;background:var(--grey-bg);display:flex;align-items:center;justify-content:center;font-size:12px;font-weight:600;color:#4a4d49}
+.nm{font-size:15px;font-weight:500;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.mt{font-size:13px;color:var(--app-muted);margin-top:2px;white-space:nowrap;overflow:hidden;text-overflow:ellipsis;max-width:150px}
+.pill{font-size:12.5px;font-weight:500;padding:3px 9px;border-radius:999px;justify-self:end;white-space:nowrap}
+.p-red{color:var(--red);background:var(--red-bg)}
+.p-amber{color:var(--amber);background:var(--amber-bg)}
+.p-grey{color:#4f524e;background:var(--grey-bg)}
+.act{grid-column:3;font-size:13.5px;color:#3a3d39;justify-self:end;margin-top:-4px}
+.btnrem{position:relative;display:inline-flex;align-items:center;gap:6px;padding:5px 10px;border-radius:8px;border:1px solid transparent;transition:all 300ms}
+.btnrem.go{border-color:var(--app-line);background:#fff;box-shadow:0 1px 3px rgba(0,0,0,.08)}
+.qa .item{display:flex;gap:10px;align-items:center;font-size:15px;padding:9px 6px;color:#2d302c}
+.qa .item i{width:16px;height:16px;border:1.5px solid #555;border-radius:4px;display:inline-block}
+.toast{position:absolute;right:40px;top:36px;color:var(--app-ink);font-weight:500;background:#fff;border:1px solid var(--app-line);border-radius:12px;box-shadow:0 10px 30px rgba(0,0,0,.12);padding:14px 18px;font-size:15px;display:flex;gap:10px;align-items:center}
+.toast i{width:18px;height:18px;border-radius:50%;background:var(--green);display:inline-block}
+.cursor{position:absolute;left:0;top:0;width:28px;height:28px;pointer-events:none;transition:transform 700ms var(--ease),opacity 300ms;opacity:0}
+.cursor.in{opacity:1}
+.cursor svg{filter:drop-shadow(0 2px 3px rgba(0,0,0,.3))}
+.ring{position:absolute;left:-14px;top:-14px;width:56px;height:56px;border-radius:50%;border:3px solid var(--signal);opacity:0;transform:scale(.3)}
+.ring.in{animation:ring 600ms var(--ease) forwards}
+@keyframes ring{0%{opacity:.9;transform:scale(.3)}100%{opacity:0;transform:scale(1.2)}}
+.callout{position:absolute;background:var(--ink);color:var(--paper);font-family:'Geist Mono',monospace;font-size:14px;padding:8px 12px;border-radius:4px;white-space:nowrap}
+.callout::before{content:"";position:absolute;left:-6px;top:50%;width:12px;height:12px;background:var(--ink);transform:translateY(-50%) rotate(45deg)}
+
+/* Scene: rules */
+#s-rules{background:var(--app-bg);color:var(--app-ink);padding:90px 110px;display:flex;flex-direction:column;gap:22px;font-family:'Inter',sans-serif}
+.rule{display:grid;grid-template-columns:90px 1fr 320px;align-items:center;background:#fff;border:1px solid var(--app-line);border-radius:14px;padding:22px 28px}
+.rule .rn{font-size:40px;color:var(--signal)}
+.rule .rt{font-size:30px;font-weight:600;letter-spacing:-0.01em}
+.rule .rv{display:flex;gap:10px;justify-content:flex-end;align-items:center;position:relative}
+.rule .pill{font-size:16px;padding:6px 14px}
+.st{position:absolute;right:0;opacity:0;transition:opacity 250ms}
+.st.on{opacity:1}
+.youdecide{font-size:16px;font-weight:500;border:1px solid var(--app-ink);border-radius:8px;padding:6px 12px}
+/* Scene 5: end */
+#s-end{background:var(--ink);color:var(--paper);padding:84px 110px 130px;display:flex;flex-direction:column;justify-content:flex-start;gap:56px}
+#s-end .top{display:flex;justify-content:space-between;align-items:flex-start}
+#s-end h2{margin:0;font-size:92px;line-height:.92;max-width:900px}
+.live{display:inline-flex;align-items:center;gap:8px;background:var(--signal);color:var(--ink);font-family:'Geist Mono',monospace;font-size:15px;padding:6px 12px}
+.live i{width:8px;height:8px;border-radius:50%;background:var(--ink);animation:pulse 1.6s ease-in-out infinite}
+@keyframes pulse{50%{opacity:.3}}
+.chips{display:grid;grid-template-columns:repeat(3,minmax(0,1fr));gap:16px;max-width:980px}
+.chip{border:1px solid rgba(244,242,238,.3);padding:18px 20px;font-size:17px;color:#CFCAC2}
+.chip b{font-family:'Archivo',sans-serif;font-weight:800;font-size:30px;display:block;color:var(--paper);margin-bottom:2px}
+.ctas{display:flex;gap:16px;margin-top:56px}
+.cta{font-family:'Geist Mono',monospace;font-size:16px;padding:14px 20px;border:1px solid var(--paper);color:var(--paper);text-decoration:none}
+.cta.p{background:var(--paper);color:var(--ink)}
+
+/* Captions */
+.caps{position:absolute;left:50%;bottom:30px;transform:translateX(-50%);max-width:1040px;width:max-content;padding:14px 22px;background:rgba(10,10,10,.82);backdrop-filter:blur(6px);border-radius:10px;font-family:'Archivo',sans-serif;font-weight:700;font-size:28px;line-height:1.25;letter-spacing:-0.01em;text-align:center;color:var(--paper);transition:opacity 300ms}
+.caps.off,.caps.gone{opacity:0}
+.w{opacity:.32;transition:opacity 120ms,color 120ms,background 120ms;border-radius:4px;padding:0 3px;margin:0 -1px}
+.w.said{opacity:1}
+.w.now{opacity:1;background:var(--signal);color:var(--ink)}
+.w.key.said{color:var(--signal)}
+.w.key.now{color:var(--ink)}
+
+/* Controls */
+.controls{display:flex;align-items:center;gap:12px;width:min(1100px,100%);font-family:'Geist Mono',monospace;font-size:13px;color:#A8A39C}
+.controls button{font:inherit;color:var(--paper);background:#222;border:1px solid #3a3835;padding:0 14px;min-height:40px;border-radius:6px;cursor:pointer}
+.controls button[aria-pressed="true"]{background:var(--signal);color:var(--ink);border-color:var(--signal)}
+.controls button:focus-visible,.cta:focus-visible{outline:2px solid var(--signal);outline-offset:2px}
+.controls input[type=range]{flex:1;accent-color:var(--signal)}
+.note{width:min(1100px,100%);font-size:13px;color:#8a857e;line-height:1.5;margin:0}
+.bigplay{position:absolute;inset:0;display:flex;align-items:center;justify-content:center;background:rgba(10,10,10,.35);border:0;cursor:pointer;color:var(--paper);font-family:'Geist Mono',monospace;font-size:16px;gap:12px;transition:opacity 300ms}
+.bigplay span.c{width:84px;height:84px;border-radius:50%;background:var(--signal);display:flex;align-items:center;justify-content:center}
+.bigplay.hide{opacity:0;pointer-events:none}
+@media (prefers-reduced-motion: reduce){
+  .fx,.fx.pop,.fx.left{transform:none!important;transition:opacity 300ms}
+  #s-title .disc{animation:none}
+}
+</style>
+</head>
+<body>
+<div class="wrap">
+  <div class="bezel">
+    <div class="screen" id="screen">
+      <div class="stage" id="stage">
+
+        <section class="scene" id="s-title" aria-hidden="true">
+          <div class="disc fx pop" data-at="0.10"></div>
+          <h1 class="disp fx" data-at="0.30">Nestwell</h1>
+          <p class="mono fx" data-at="0.60">01 / RENT MANAGER FOR LAGOS CO-LIVING</p>
+        </section>
+
+        <section class="scene" id="s-beds" aria-hidden="true">
+          <div class="stats">
+            <div class="stat fx" data-at="2.30"><div class="n disp">4</div><div class="l mono">PROPERTIES</div></div>
+            <div class="stat fx" data-at="3.10"><div class="n disp">11</div><div class="l mono">BEDS</div></div>
+            <div class="stat fx" data-at="4.70"><div class="n disp" style="color:var(--signal)">11</div><div class="l mono">DIFFERENT DUE DAYS</div></div>
+          </div>
+          <div class="beds" id="beds"></div>
+        </section>
+
+        <section class="scene" id="s-mess" aria-hidden="true">
+          <div class="sheet fx left" data-at="6.30">
+            <div class="row h"><div>Tenant</div><div>Room</div><div>Due</div><div>Status</div><div>Notes</div></div>
+            <div class="row"><div>Tolulope A.</div><div>Lekki</div><div>2nd</div><div>Paid</div><div>transfer</div></div>
+            <div class="row"><div>Babatunde L.</div><div>Yaba</div><div>21st</div><div class="cell-bad" data-at="9.25">??</div><div>said Friday</div></div>
+            <div class="row"><div>Halima B.</div><div>Surulere</div><div>9th</div><div class="cell-bad" data-at="9.45">late?</div><div>chase</div></div>
+            <div class="row"><div>Emeka O.</div><div>Surulere</div><div>18th</div><div class="cell-bad" data-at="9.65">34 days</div><div>notice??</div></div>
+            <div class="row"><div>Damilola O.</div><div>Surulere</div><div>24th</div><div>-</div><div></div></div>
+            <div class="row"><div>Bed 3</div><div>Surulere</div><div>-</div><div>vacant</div><div>list it</div></div>
+          </div>
+          <div class="chat">
+            <div class="bub them fx" data-at="7.10">Good morning. Which account again?<small>8:02</small></div>
+            <div class="bub me fx" data-at="7.45">Same as last month. Rent was due on the 9th.<small>8:05</small></div>
+            <div class="bub them fx" data-at="7.80">Will send Friday, abeg<small>8:31</small></div>
+            <div class="bub them fx" data-at="8.15">I paid last week o<small>9:14</small></div>
+          </div>
+                    <div class="rcpt fx" data-at="8.30" style="left:560px;top:395px;transform:rotate(4deg)"><div class="rh">Transfer successful</div><div class="ra">&#8358;425,000</div><div class="rl">To: NESTWELL RENTS</div><div class="rl">Ref: 0942 1187 33</div></div>
+          <div class="rcpt fx" data-at="8.60" style="left:700px;top:420px;transform:rotate(-5deg)"><div class="rh">Transfer successful</div><div class="ra">&#8358;180,000</div><div class="rl">Narration: rent part 1</div><div class="rl">Ref: 7710 0034 92</div></div>
+          <div class="leak disp fx" data-at="10.75">money leaks here.</div>
+        </section>
+
+        <section class="scene" id="s-dash" aria-hidden="true">
+          <div class="cam" id="cam">
+            <div class="app">
+              <aside class="side">
+                <div class="brand"><i></i>Nestwell</div>
+                <div class="nav on">Home</div><div class="nav">Properties</div><div class="nav">Messages</div>
+                <div class="sub">In the full version</div>
+                <div class="nav">Tenants</div><div class="nav">Payment history</div><div class="nav">Reports</div><div class="nav">Settings</div>
+              </aside>
+              <div class="main">
+                <div>
+                  <h2 class="hello">Good morning, <b>Collins</b></h2>
+                  <div class="card rev">
+                    <div class="t">Revenue, last 30 days</div>
+                    <div class="v">&#8358;2,125,000</div>
+                    <svg width="560" height="150" viewBox="0 0 560 150" aria-hidden="true"><path d="M0 140 L20 130 L120 130 L140 122 L170 122 L190 112 L230 112 L250 80 L290 80 L310 66 L420 66 L440 46 L560 46" fill="none" stroke="#2F8A52" stroke-width="2.5"/><path d="M0 140 L20 130 L120 130 L140 122 L170 122 L190 112 L230 112 L250 80 L290 80 L310 66 L420 66 L440 46 L560 46 L560 150 L0 150Z" fill="#2F8A52" opacity=".08"/></svg>
+                  </div>
+                  <div class="card kpis">
+                    <div class="kpi"><div class="t">Payments due</div><div class="v" style="color:var(--amber)">3</div><div class="s" style="color:var(--red)">1 overdue</div></div>
+                    <div class="kpi"><div class="t">Vacant beds</div><div class="v">2</div><div class="s">9 of 11 filled</div></div>
+                    <div class="kpi"><div class="t">Rent roll</div><div class="v">&#8358;3,005,000</div><div class="s">4 properties</div></div>
+                  </div>
+                </div>
+                <div>
+                  <div class="att">
+                    <h3 style="margin-top:4px">Needs attention</h3>
+                    <div class="card">
+                      <div class="trow"><div class="av">EO</div><div><div class="nm">Emeka Obi</div><div class="mt">Surulere 3-bed, 34 days late</div></div><span class="pill p-red">Notice issued</span></div>
+                      <div class="trow" id="row-halima"><div class="av">HB</div><div><div class="nm">Halima Bello</div><div class="mt">Surulere 3-bed, 12 days late</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="pill p-red">Overdue</span><span class="btnrem" id="btn-rem">Remind</span></div></div>
+                      <div class="trow"><div class="av">BL</div><div><div class="nm">Babatunde Lawal</div><div class="mt">Yaba studio (Akoka side)</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="pill p-amber">Due today</span><span class="btnrem">Remind</span></div></div>
+                      <div class="trow"><div class="av">DO</div><div><div class="nm">Damilola Ogunleye</div><div class="mt">Surulere 3-bed, due 24 Nov</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="pill p-amber">Due soon</span><span class="btnrem">Remind</span></div></div>
+                      <div class="trow"><div class="av">&#9638;</div><div><div class="nm">Surulere 3-bedroom</div><div class="mt">Triple room, Bed 3</div></div><div style="display:flex;flex-direction:column;align-items:flex-end;gap:6px"><span class="pill p-grey">Vacant</span><span class="btnrem">Add tenant</span></div></div>
+                    </div>
+                  </div>
+                  <div class="qa">
+                    <h3 style="margin-top:28px">Quick actions</h3>
+                    <div class="item"><i></i>Send message</div><div class="item"><i></i>Record payment</div><div class="item"><i></i>View overdue</div><div class="item"><i></i>Add a tenant</div>
+                  </div>
+                </div>
+              </div>
+            </div>
+            <div class="callout fx" data-at="15.15" data-out="16.95" style="left:1240px;top:80px">who owes what</div>
+            <div class="callout fx" data-at="16.00" data-out="16.95" style="left:1240px;top:150px">what to do today</div>
+            <div class="cursor" id="cursor"><svg width="28" height="28" viewBox="0 0 24 24" aria-hidden="true"><path d="M4 2 L4 20 L9 15 L12.5 22 L15.5 20.5 L12 14 L19 14 Z" fill="#0A0A0A" stroke="#fff" stroke-width="1.5"/></svg><div class="ring" id="ring"></div></div>
+          </div>
+          <div class="toast fx" data-at="17.85"><i></i>Reminder ready to send on WhatsApp</div>
+        </section>
+
+        <section class="scene" id="s-rules" aria-hidden="true">
+          <p class="mono fx" data-at="18.35" style="margin:0;font-size:15px;color:var(--soft);letter-spacing:.08em">WHAT THE SYSTEM HANDLES</p>
+          <div class="rule fx" data-at="18.45"><div class="rn disp">01</div><div class="rt">Statuses update themselves</div><div class="rv"><span class="pill p-amber st st1">Due soon</span><span class="pill p-amber st st2">Due today</span><span class="pill p-red st st3">Overdue</span></div></div>
+          <div class="rule fx" data-at="20.00"><div class="rn disp">02</div><div class="rt">Late fees apply on schedule</div><div class="rv"><span class="mono" style="font-size:16px;color:var(--soft)">3-day grace, then</span><span class="pill p-red fx" data-at="20.65">+ late fee</span></div></div>
+          <div class="rule fx" data-at="21.20"><div class="rn disp">03</div><div class="rt">Notices flagged, I make the call</div><div class="rv"><span class="pill p-red">Notice flagged</span><span class="youdecide fx" data-at="22.75">You decide</span></div></div>
+        </section>
+
+        <section class="scene" id="s-end" aria-hidden="true">
+          <div class="top">
+            <h2 class="disp fx" data-at="23.60">Designed it. Built it. Shipped it.</h2>
+            <span class="live fx" data-at="25.05"><i></i>LIVE</span>
+          </div>
+          <div class="chips">
+            <div class="chip fx" data-at="25.75"><b>Solo</b>built with Claude Code</div>
+            <div class="chip fx" data-at="26.35"><b>100</b>accessibility score (Lighthouse)</div>
+            <div class="chip fx" data-at="26.95"><b>Stack</b>Next.js, Supabase, Vercel</div>
+          </div>
+          <div class="ctas fx" data-at="27.60">
+            <a class="cta p" href="https://nestwell-mocha.vercel.app" target="_blank" rel="noopener">Open the live product &#8594;</a>
+            <a class="cta" href="https://collinsnwaoyo.github.io/portfolio/" target="_blank" rel="noopener">Read the case study</a>
+          </div>
+        </section>
+
+        <div class="caps" id="caps" aria-live="off"></div>
+        <audio id="vo" src="nestwell-vo.mp3" preload="auto"></audio>
+      </div>
+      <button class="bigplay" id="bigplay" type="button" aria-label="Play the Nestwell brief"><span class="c"><svg width="30" height="30" viewBox="0 0 24 24" aria-hidden="true"><path d="M7 4 L20 12 L7 20Z" fill="#0A0A0A"/></svg></span>Play the 30-second brief</button>
+    </div>
+  </div>
+</div>
+
+<div class="controls">
+  <button type="button" id="play" aria-label="Play">Play</button>
+  <button type="button" id="restart" aria-label="Restart">Restart</button>
+  <input type="range" id="scrub" min="0" max="1000" value="0" aria-label="Scrub timeline">
+  <span id="time">0.0 / 29.6s</span>
+  <button type="button" id="voice" aria-pressed="true">Sound</button>
+  <button type="button" id="ccbtn" aria-pressed="true">Captions</button>
+</div>
+<p class="note">Draft 3. Timed to Collins's recording: every caption word and camera move is keyed to when it is spoken. Dashboard rebuilt from the live Nestwell demo.</p>
+
+<script>
+(function(){
+  const DUR = 29.6;
+  const SCENES = [
+    {id:'s-title', a:0,     b:2.1},
+    {id:'s-beds',  a:2.1,   b:5.8},
+    {id:'s-mess',  a:5.8,   b:11.45},
+    {id:'s-dash',  a:11.45, b:18.35},
+    {id:'s-rules', a:18.35, b:23.4},
+    {id:'s-end',   a:23.4,  b:DUR}
+  ];
+  // Caption word times come from forced alignment of Collins's recording
+  const CAPS = [{"id": "c1", "a": 0, "b": 0.8, "text": "Nestwell.", "words": [{"w": "Nestwell.", "t": 0.24, "key": false}]}, {"id": "c2", "a": 0.8, "b": 5.85, "text": "A co-living business in Lagos: four properties, eleven beds, every tenant on a different due day.", "words": [{"w": "A", "t": 0.83, "key": false}, {"w": "co-living", "t": 0.88, "key": false}, {"w": "business", "t": 1.24, "key": false}, {"w": "in", "t": 1.55, "key": false}, {"w": "Lagos:", "t": 1.66, "key": false}, {"w": "four", "t": 2.36, "key": true}, {"w": "properties,", "t": 2.53, "key": false}, {"w": "eleven", "t": 3.16, "key": true}, {"w": "beds,", "t": 3.51, "key": false}, {"w": "every", "t": 4.12, "key": false}, {"w": "tenant", "t": 4.32, "key": false}, {"w": "on", "t": 4.63, "key": false}, {"w": "a", "t": 4.7, "key": false}, {"w": "different", "t": 4.76, "key": true}, {"w": "due", "t": 5.14, "key": false}, {"w": "day.", "t": 5.28, "key": false}]}, {"id": "c3", "a": 5.85, "b": 10.4, "text": "It all ran on spreadsheets, WhatsApp and bank transfer screenshots that had to be tracked by hand.", "words": [{"w": "It", "t": 5.91, "key": false}, {"w": "all", "t": 6.06, "key": false}, {"w": "ran", "t": 6.18, "key": false}, {"w": "on", "t": 6.42, "key": false}, {"w": "spreadsheets,", "t": 6.55, "key": true}, {"w": "WhatsApp", "t": 7.15, "key": true}, {"w": "and", "t": 7.63, "key": false}, {"w": "bank", "t": 7.76, "key": false}, {"w": "transfer", "t": 7.95, "key": false}, {"w": "screenshots", "t": 8.21, "key": true}, {"w": "that", "t": 8.85, "key": false}, {"w": "had", "t": 9.0, "key": false}, {"w": "to", "t": 9.11, "key": false}, {"w": "be", "t": 9.19, "key": false}, {"w": "tracked", "t": 9.25, "key": false}, {"w": "by", "t": 9.46, "key": false}, {"w": "hand.", "t": 9.58, "key": false}]}, {"id": "c3b", "a": 10.4, "b": 11.45, "text": "That is where money leaked.", "words": [{"w": "That", "t": 10.46, "key": false}, {"w": "is", "t": 10.59, "key": false}, {"w": "where", "t": 10.68, "key": false}, {"w": "money", "t": 10.8, "key": false}, {"w": "leaked.", "t": 11.03, "key": true}]}, {"id": "c4", "a": 11.45, "b": 15.1, "text": "So I designed the system first, with a home screen that answers a single question every morning:", "words": [{"w": "So", "t": 11.53, "key": false}, {"w": "I", "t": 11.65, "key": false}, {"w": "designed", "t": 11.69, "key": false}, {"w": "the", "t": 11.89, "key": false}, {"w": "system", "t": 11.95, "key": true}, {"w": "first,", "t": 12.19, "key": false}, {"w": "with", "t": 12.73, "key": false}, {"w": "a", "t": 12.84, "key": false}, {"w": "home", "t": 12.87, "key": true}, {"w": "screen", "t": 13.01, "key": true}, {"w": "that", "t": 13.2, "key": false}, {"w": "answers", "t": 13.33, "key": false}, {"w": "a", "t": 13.6, "key": false}, {"w": "single", "t": 13.82, "key": false}, {"w": "question", "t": 14.02, "key": false}, {"w": "every", "t": 14.34, "key": false}, {"w": "morning:", "t": 14.53, "key": false}]}, {"id": "c4b", "a": 15.1, "b": 17.2, "text": "who owes what, and what do I need to do today?", "words": [{"w": "who", "t": 15.19, "key": true}, {"w": "owes", "t": 15.44, "key": true}, {"w": "what,", "t": 15.53, "key": true}, {"w": "and", "t": 15.92, "key": false}, {"w": "what", "t": 16.03, "key": false}, {"w": "do", "t": 16.14, "key": false}, {"w": "I", "t": 16.2, "key": false}, {"w": "need", "t": 16.25, "key": false}, {"w": "to", "t": 16.34, "key": false}, {"w": "do", "t": 16.43, "key": false}, {"w": "today?", "t": 16.55, "key": true}]}, {"id": "c5", "a": 17.2, "b": 18.4, "text": "One tap sends a reminder.", "words": [{"w": "One", "t": 17.29, "key": false}, {"w": "tap", "t": 17.43, "key": true}, {"w": "sends", "t": 17.63, "key": false}, {"w": "a", "t": 17.8, "key": false}, {"w": "reminder.", "t": 17.85, "key": false}]}, {"id": "c6", "a": 18.4, "b": 23.5, "text": "Statuses update themselves, late fees apply on schedule, and notices get flagged, never sent without me.", "words": [{"w": "Statuses", "t": 18.46, "key": true}, {"w": "update", "t": 18.89, "key": false}, {"w": "themselves,", "t": 19.16, "key": false}, {"w": "late", "t": 20.02, "key": true}, {"w": "fees", "t": 20.2, "key": true}, {"w": "apply", "t": 20.37, "key": false}, {"w": "on", "t": 20.55, "key": false}, {"w": "schedule,", "t": 20.68, "key": false}, {"w": "and", "t": 21.12, "key": false}, {"w": "notices", "t": 21.24, "key": false}, {"w": "get", "t": 21.58, "key": false}, {"w": "flagged,", "t": 21.72, "key": true}, {"w": "never", "t": 22.29, "key": false}, {"w": "sent", "t": 22.49, "key": false}, {"w": "without", "t": 22.8, "key": false}, {"w": "me.", "t": 23.04, "key": false}]}, {"id": "c7", "a": 23.5, "b": 27.4, "text": "I designed it, then built and shipped it myself, with AI as my engineer.", "words": [{"w": "I", "t": 23.63, "key": false}, {"w": "designed", "t": 23.73, "key": false}, {"w": "it,", "t": 24.06, "key": false}, {"w": "then", "t": 24.29, "key": false}, {"w": "built", "t": 24.58, "key": true}, {"w": "and", "t": 24.86, "key": false}, {"w": "shipped", "t": 25.09, "key": true}, {"w": "it", "t": 25.3, "key": false}, {"w": "myself,", "t": 25.36, "key": false}, {"w": "with", "t": 25.78, "key": false}, {"w": "AI", "t": 26.1, "key": true}, {"w": "as", "t": 26.35, "key": false}, {"w": "my", "t": 26.54, "key": false}, {"w": "engineer.", "t": 26.64, "key": false}]}];
+
+  // Bed tiles
+  const days=['2nd','5th','7th','9th','12th','14th','18th','21st','24th','27th','30th'];
+  const beds=document.getElementById('beds');
+  days.forEach((d,i)=>{const el=document.createElement('div');el.className='bed fx pop';el.dataset.at=(3.5+i*0.1).toFixed(2);el.innerHTML='<span class="ic"></span><span class="d mono">DUE<b>'+d+'</b></span>';beds.appendChild(el);});
+
+  // Camera keyframes for dashboard (app coords 1280x800, stage 1280x720)
+  const CAM=[
+    {t:11.45,cx:640,cy:400,s:0.9},
+    {t:12.8,cx:640,cy:400,s:0.9},
+    {t:14.9,cx:1050,cy:300,s:1.55},
+    {t:16.85,cx:1050,cy:300,s:1.55},
+    {t:17.35,cx:1080,cy:200,s:2.3},
+    {t:18.0,cx:1080,cy:200,s:2.3},
+    {t:18.4,cx:640,cy:400,s:0.9}
+  ];
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const ease=x=>x<.5?4*x*x*x:1-Math.pow(-2*x+2,3)/2;
+  function camAt(t){
+    if(t<=CAM[0].t) return CAM[0];
+    for(let i=0;i<CAM.length-1;i++){const p=CAM[i],q=CAM[i+1];if(t<=q.t){let k=(t-p.t)/(q.t-p.t);k=reduce?(k<1?0:1):ease(k);return {cx:p.cx+(q.cx-p.cx)*k,cy:p.cy+(q.cy-p.cy)*k,s:p.s+(q.s-p.s)*k};}}
+    return CAM[CAM.length-1];
+  }
+
+  const stage=document.getElementById('stage'), screen=document.getElementById('screen');
+  function fit(){stage.style.transform='scale('+(screen.clientWidth/1280)+')';}
+  addEventListener('resize',fit); fit();
+
+  const fxEls=[...document.querySelectorAll('[data-at]')];
+  const caps=document.getElementById('caps');
+  const cam=document.getElementById('cam'), cursor=document.getElementById('cursor'), ring=document.getElementById('ring');
+  const rowH=document.getElementById('row-halima'), btn=document.getElementById('btn-rem');
+  function offIn(el,root){let x=0,y=0;while(el&&el!==root){x+=el.offsetLeft;y+=el.offsetTop;el=el.offsetParent;}return {x,y};}
+  let BP={x:1190,y:190};
+  const att=document.querySelector('.att .card');
+  function measure(){
+    const o=offIn(btn,cam);BP={x:o.x+btn.offsetWidth/2,y:o.y+btn.offsetHeight/2};
+    const r=offIn(rowH,cam), A=offIn(att,cam);
+    const ax=A.x+att.offsetWidth/2, ay=A.y+att.offsetHeight/2;
+    const rx=r.x+rowH.offsetWidth/2, ry=r.y+rowH.offsetHeight/2;
+    CAM[2].cx=CAM[3].cx=ax+60; CAM[2].cy=CAM[3].cy=ay-20;
+    CAM[4].cx=CAM[5].cx=rx; CAM[4].cy=CAM[5].cy=ry+30;
+  }
+  measure(); document.fonts&&document.fonts.ready.then(()=>{measure();try{render(t);}catch(e){}});
+  let capScene=null, spans=[];
+
+  function render(t){
+    // scenes crossfade
+    SCENES.forEach(s=>{
+      const el=document.getElementById(s.id);
+      const fi=Math.min(1,Math.max(0,(t-(s.a-0.15))/0.35)), fo=Math.min(1,Math.max(0,((s.b+0.2)-t)/0.35));
+      el.style.opacity=(t>=s.a-0.15&&t<=s.b+0.2)?Math.min(fi,fo):0;
+    });
+    fxEls.forEach(e=>e.classList.toggle('in',t>=parseFloat(e.dataset.at)&&!(e.dataset.out&&t>=parseFloat(e.dataset.out))));
+    const st=t<18.95?1:(t<19.2?2:3); document.querySelectorAll('.st').forEach(e=>e.classList.toggle('on',e.classList.contains('st'+st)));
+    // camera
+    const c=camAt(t); cam.style.transform='translate('+(640-c.cx*c.s)+'px,'+(360-c.cy*c.s)+'px) scale('+c.s+')';
+    // cursor and click on Remind
+    const showCur=t>=16.9&&t<18.3; cursor.classList.toggle('in',showCur);
+    cursor.style.transform=t>=17.05?'translate('+(BP.x-4)+'px,'+(BP.y-2)+'px)':'translate('+(BP.x-170)+'px,'+(BP.y+120)+'px)';
+    ring.classList.toggle('in',t>=17.45&&t<18.3);
+    rowH.classList.toggle('hl',t>=16.95&&t<18.4);
+    btn.classList.toggle('go',t>=17.48); btn.textContent=t>=17.48?'Send reminder':'Remind';
+    // captions
+    const s=CAPS.find(x=>t>=x.a&&t<x.b)||CAPS[CAPS.length-1];
+    caps.classList.toggle('gone',t>=27.4);
+    if(s!==capScene){capScene=s;caps.innerHTML='';spans=s.words.map(o=>{const sp=document.createElement('span');sp.className='w'+(o.key?' key':'');sp.textContent=o.w;caps.appendChild(sp);caps.appendChild(document.createTextNode(' '));return sp;});}
+    let cur=-1; s.words.forEach((o,i)=>{if(t>=o.t)cur=i;});
+    spans.forEach((sp,i)=>{sp.classList.toggle('said',i<=cur);sp.classList.toggle('now',i===cur&&t<s.b-0.25);});
+    document.getElementById('time').textContent=t.toFixed(1)+' / '+DUR.toFixed(1)+'s';
+    scrub.value=Math.round(t/DUR*1000);
+  }
+
+  // playback: audio is the clock while it plays; a frame clock covers the tail after the voice ends
+  const vo=document.getElementById('vo');
+  let t=0, playing=false, last=0, soundOn=true;
+  const playBtn=document.getElementById('play'), scrub=document.getElementById('scrub'), big=document.getElementById('bigplay');
+  function voActive(){return soundOn && vo.duration && t < vo.duration-0.02;}
+  function tick(now){
+    if(!playing)return;
+    if(voActive() && !vo.paused){ t=vo.currentTime; }
+    else { t+=(now-last)/1000; }
+    last=now;
+    if(t>=DUR){t=DUR;playing=false;try{vo.pause();}catch(e){}setBtn();}
+    render(t);
+    if(playing) requestAnimationFrame(tick);
+  }
+  function setBtn(){playBtn.textContent=playing?'Pause':'Play';playBtn.setAttribute('aria-label',playing?'Pause':'Play');big.classList.toggle('hide',playing||t>0.05);}
+  function startAudio(){ if(!soundOn) return; try{ if(vo.duration && t>=vo.duration) return; vo.currentTime=t; const pr=vo.play(); if(pr&&pr.catch) pr.catch(()=>{}); }catch(e){} }
+  function play(){ if(t>=DUR) t=0; playing=true; last=performance.now(); startAudio(); setBtn(); requestAnimationFrame(tick); }
+  function pause(){ playing=false; try{vo.pause();}catch(e){} setBtn(); }
+  playBtn.onclick=()=>playing?pause():play();
+  big.onclick=play;
+  document.getElementById('restart').onclick=()=>{t=0;render(0);play();};
+  scrub.oninput=()=>{t=scrub.value/1000*DUR;try{vo.currentTime=Math.min(t,vo.duration||t);}catch(e){} render(t);setBtn(); if(playing&&soundOn){startAudio();}};
+  const vb=document.getElementById('voice');
+  vb.onclick=()=>{soundOn=!soundOn;vb.setAttribute('aria-pressed',soundOn);if(!soundOn){try{vo.pause();}catch(e){}}else if(playing){startAudio();}};
+  vo.addEventListener('ended',()=>{ last=performance.now(); });
+  const cc=document.getElementById('ccbtn');
+  cc.onclick=()=>{const on=cc.getAttribute('aria-pressed')!=='true';cc.setAttribute('aria-pressed',on);caps.classList.toggle('off',!on);};
+  render(0); setBtn();
+})();
+</script>
+</body>
+</html>

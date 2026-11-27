@@ -75,8 +75,8 @@ test('filtering never reshuffles tiles and keeps hidden ones keyboard-inert', as
     .getByText('Nestwell', { exact: true })
     .locator('xpath=ancestor::li[1]');
   expect(await nestwellLi.evaluate((el) => (el as HTMLLIElement).inert)).toBe(false);
-  await nestwellLi.locator('button').focus();
-  await expect(nestwellLi.locator('button')).toBeFocused();
+  await nestwellLi.locator('a, button').focus();
+  await expect(nestwellLi.locator('a, button')).toBeFocused();
 });
 
 test('the top of My work peeks into the first screen', async ({ page }) => {

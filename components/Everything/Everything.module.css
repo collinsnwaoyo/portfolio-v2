@@ -101,6 +101,7 @@
   color: inherit;
   font: inherit;
   text-align: left;
+  text-decoration: none;
   cursor: pointer;
   transition: opacity 400ms ease;
 }

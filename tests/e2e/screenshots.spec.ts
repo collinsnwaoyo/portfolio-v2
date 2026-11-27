@@ -7,3 +7,11 @@ test('homepage screenshot', async ({ page }, testInfo) => {
     fullPage: true,
   });
 });
+
+test('nestwell case study screenshot', async ({ page }, testInfo) => {
+  await page.goto('./work/nestwell/');
+  await page.screenshot({
+    path: `test-results/case-study-${testInfo.project.name}.png`,
+    fullPage: true,
+  });
+});
