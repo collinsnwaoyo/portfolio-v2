@@ -23,12 +23,12 @@ export default defineConfig({
   projects: [
     {
       name: 'desktop-1440',
-      testMatch: /smoke\.spec\.ts|case-study\.spec\.ts/,
+      testMatch: /smoke\.spec\.ts|case-study\.spec\.ts|player\.spec\.ts/,
       use: { ...devices['Desktop Chrome'], viewport: { width: 1440, height: 900 } },
     },
     {
       name: 'mobile-390',
-      testMatch: /smoke\.spec\.ts|case-study\.spec\.ts/,
+      testMatch: /smoke\.spec\.ts|case-study\.spec\.ts|player\.spec\.ts/,
       use: { ...devices['Desktop Chrome'], viewport: { width: 390, height: 844 } },
     },
     ...Object.entries(SCREENSHOT_WIDTHS).map(([label, viewport]) => ({

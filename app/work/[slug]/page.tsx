@@ -11,6 +11,7 @@ import {
 import { projects } from '../../../content/content';
 import { asset } from '../../../lib/paths';
 import type { Project } from '../../../content/content';
+import PlayClipButton from '../../../components/CaseStudy/PlayClipButton';
 
 const STUB_SLUGS = new Set(stubCaseStudies.map((s) => s.slug));
 
@@ -153,14 +154,7 @@ export default async function CaseStudyPage({
             >
               Open the live product <span aria-hidden="true">&#8599;</span>
             </a>
-            <a
-              href={asset(study.clipHref)}
-              target="_blank"
-              rel="noopener noreferrer"
-              className={styles.ctaSecondary}
-            >
-              <span aria-hidden="true">&#9654;</span> Play the 30-second brief
-            </a>
+            <PlayClipButton className={styles.ctaSecondary} />
           </div>
         </div>
 

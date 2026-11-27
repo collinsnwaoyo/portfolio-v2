@@ -124,7 +124,10 @@
 
 .ctaSecondary {
   border: 1px solid var(--ink);
+  background: transparent;
   color: var(--ink);
+  font-family: inherit;
+  cursor: pointer;
 }
 
 .ctaPrimary:hover,

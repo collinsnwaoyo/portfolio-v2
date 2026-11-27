@@ -10,13 +10,15 @@ test('Nestwell case study renders with working live and clip links', async ({ pa
   await expect(liveLink).toHaveAttribute('href', 'https://nestwell-mocha.vercel.app');
   await expect(liveLink).toHaveAttribute('target', '_blank');
 
-  const clipLink = page.getByRole('link', { name: /Play the 30-second brief/ });
-  const clipHref = await clipLink.getAttribute('href');
-  expect(clipHref).toContain('/clips/nestwell/landscape.html');
+  const playButton = page.getByRole('button', { name: /Play the 30-second brief/ });
+  await playButton.click();
 
-  // the clip itself is a real, reachable page
-  const clipResponse = await page.request.get(clipHref!);
-  expect(clipResponse.ok()).toBe(true);
+  const dialog = page.getByRole('dialog', { name: 'Nestwell clip' });
+  await expect(dialog).toBeVisible();
+
+  await page.keyboard.press('Escape');
+  await expect(dialog).toBeHidden();
+  await expect(playButton).toBeFocused();
 
   await expect(page.getByText('Four rules.')).toBeVisible();
   await expect(page.getByText('does not try to do more')).toBeVisible();

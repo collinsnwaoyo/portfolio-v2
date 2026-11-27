@@ -1,7 +1,11 @@
-import Link from 'next/link';
+'use client';
+
+import { useEffect, useRef, useState } from 'react';
+import { useRouter } from 'next/navigation';
 import styles from './MyWork.module.css';
 import { getFeaturedProjects } from '../../content/content';
 import { asset } from '../../lib/paths';
+import Player, { type PlayerHandle } from '../Player/Player';
 
 function DiscCase({
   discImage,
@@ -45,6 +49,44 @@ export default function MyWork() {
   const featured = getFeaturedProjects();
   const nestwell = featured[0];
   const rest = featured.slice(1);
+  const router = useRouter();
+  const playerRef = useRef<PlayerHandle>(null);
+  const [startWithSound, setStartWithSound] = useState(false);
+
+  // Avoids useSearchParams(), which would force this whole section out of
+  // the static export's prerendered HTML and into a client-only Suspense
+  // fallback. Synced on mount and on the browser back/forward gesture; our
+  // own open/close handlers below update it directly for instant feedback.
+  useEffect(() => {
+    function syncFromUrl() {
+      setStartWithSound(new URLSearchParams(window.location.search).get('play') === 'nestwell');
+    }
+    syncFromUrl();
+    window.addEventListener('popstate', syncFromUrl);
+    return () => window.removeEventListener('popstate', syncFromUrl);
+  }, []);
+
+  function pickDesktopDisc(slug: string) {
+    if (slug === nestwell.slug) {
+      playerRef.current?.unmuteAndPlay();
+      return;
+    }
+    router.push(`/work/${slug}/`);
+  }
+
+  function pickMobileDisc(slug: string) {
+    if (slug === nestwell.slug) {
+      router.push(`/?play=${slug}`, { scroll: false });
+      setStartWithSound(true);
+      return;
+    }
+    router.push(`/work/${slug}/`);
+  }
+
+  function closeMobilePlayer() {
+    router.replace('/', { scroll: false });
+    setStartWithSound(false);
+  }
 
   return (
     <section id="work" className={styles.work} aria-label="My work">
@@ -60,45 +102,21 @@ export default function MyWork() {
       </div>
 
       <div className={styles.bodyDesktop}>
-        <div className={styles.tvWrap}>
-          <div className={styles.tvBezelArea}>
-            <div className={styles.tvScreen}>
-              <img
-                src={asset('/images/nestwell-dashboard.jpg')}
-                alt=""
-                width={800}
-                height={500}
-                loading="lazy"
-                decoding="async"
-                className={styles.tvScreenImg}
-              />
-              <span className={styles.tvCaption}>&#9654; NOW SHOWING: NESTWELL</span>
-            </div>
-          </div>
-          <img
-            src={asset('/images/objects/tv.webp')}
-            alt=""
-            width={680}
-            height={486}
-            loading="lazy"
-            decoding="async"
-            className={styles.tvFrame}
-          />
-        </div>
+        <Player ref={playerRef} placement="tv" startWithSound={startWithSound} />
 
         <ul className={styles.discRow}>
           <li className={styles.discItem}>
-            <Link href={`/work/${nestwell.slug}`} className={styles.discLink}>
+            <button type="button" onClick={() => pickDesktopDisc(nestwell.slug)} className={styles.discLink}>
               <span className={styles.discStage}>
                 <DiscCase discImage={nestwell.discImage!} alt="" size={170} />
               </span>
               <span className={styles.nowPlaying}>● NOW PLAYING</span>
               <span className={styles.discOutcome}>{nestwell.outcome}</span>
-            </Link>
+            </button>
           </li>
           {rest.map((project, i) => (
             <li className={styles.discItem} key={project.slug}>
-              <Link href={`/work/${project.slug}`} className={styles.discLink}>
+              <button type="button" onClick={() => pickDesktopDisc(project.slug)} className={styles.discLink}>
                 <span className={styles.discStage}>
                   <DiscCase
                     discImage={project.discImage!}
@@ -112,7 +130,7 @@ export default function MyWork() {
                   {(project.shortTitle ?? project.title).toUpperCase()}
                 </span>
                 <span className={styles.discOutcome}>{project.outcome}</span>
-              </Link>
+              </button>
             </li>
           ))}
         </ul>
@@ -127,8 +145,10 @@ export default function MyWork() {
         <ul className={styles.cardRail}>
           {featured.map((project, i) => (
             <li className={styles.card} key={project.slug}>
-              <Link href={`/work/${project.slug}`} className={styles.cardButton}>
-                <span className={styles.srOnly}>Open the case study for</span>
+              <button type="button" onClick={() => pickMobileDisc(project.slug)} className={styles.cardButton}>
+                <span className={styles.srOnly}>
+                  {project.slug === nestwell.slug ? 'Play the walkthrough for' : 'Open the case study for'}
+                </span>
                 <span className={styles.cardArt}>
                   <DiscCase discImage={project.discImage!} alt="" size={230} />
                 </span>
@@ -142,7 +162,7 @@ export default function MyWork() {
                 <span className={styles.playPill} aria-hidden="true">
                   ▶ 0:30
                 </span>
-              </Link>
+              </button>
             </li>
           ))}
         </ul>
@@ -154,6 +174,8 @@ export default function MyWork() {
           Scroll for more work <span aria-hidden="true">↓</span>
         </p>
       </div>
+
+      <Player placement="mobile" open={startWithSound} onClose={closeMobilePlayer} />
     </section>
   );
 }

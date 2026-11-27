@@ -7,7 +7,6 @@ export interface CaseStudy {
   intro: string;
   introAccent: string;
   liveUrl: string;
-  clipHref: string;
   meta: { label: string; value: string }[];
   heroImage: string;
   problem: {
@@ -44,7 +43,6 @@ export const nestwellCaseStudy: CaseStudy = {
   intro: 'A rent manager for Lagos co-living. ',
   introAccent: 'Designed, built and shipped by me.',
   liveUrl: 'https://nestwell-mocha.vercel.app',
-  clipHref: '/clips/nestwell/landscape.html',
   meta: [
     { label: 'ROLE', value: 'Product designer and builder' },
     { label: 'STACK', value: 'Next.js, Supabase, Vercel' },

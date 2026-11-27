@@ -1,0 +1,320 @@
+/* ---- TV placement ---- */
+
+.tvWrap {
+  position: relative;
+  width: 680px;
+  height: 486px;
+}
+
+.tvBezelArea {
+  position: absolute;
+  left: 13.9%;
+  top: 9.9%;
+  width: 72.6%;
+  height: 75.1%;
+  background: #000;
+  display: flex;
+  flex-direction: column;
+  overflow: hidden;
+}
+
+.tvScreenBox {
+  width: 100%;
+  height: 56.25%;
+  flex-shrink: 0;
+  position: relative;
+  background: var(--ink);
+}
+
+/* The rest of the bezel below the 16:9 picture: a real letterbox band for
+   captions, never overlapping the clip itself. */
+.tvCaptionBand {
+  flex: 1;
+  min-height: 0;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 2px 14px;
+  box-sizing: border-box;
+  overflow: hidden;
+}
+
+.tvFrame {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  pointer-events: none;
+}
+
+/* ---- Shared screen chrome (clip fills this box, any placement) ---- */
+
+.screenBox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  background: var(--ink);
+}
+
+.clipBox {
+  position: absolute;
+  inset: 0;
+}
+
+.muteBtn {
+  position: absolute;
+  right: 10px;
+  bottom: 10px;
+  z-index: 3;
+  width: 32px;
+  height: 32px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(14, 14, 14, 0.55);
+  color: #fff;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.muteBtn:focus-visible {
+  outline: 2px solid var(--accent-on-dark);
+  outline-offset: 2px;
+}
+
+/* ---- Captions: real text in a letterbox band, never on the picture ---- */
+
+.captionBand {
+  width: 100%;
+  min-height: 52px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 8px 16px;
+  box-sizing: border-box;
+  background: var(--ink);
+}
+
+.captionText {
+  max-width: 90%;
+  margin: 0 auto;
+  text-align: center;
+  font-family: var(--font-body), sans-serif;
+  font-weight: 500;
+  font-size: clamp(13px, 1.1vw, 16px);
+  line-height: 1.35;
+  color: var(--paper);
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+  transition: opacity 150ms ease;
+}
+.captionText :global(.word-now) {
+  color: var(--accent-on-dark);
+}
+
+/* ---- End card ---- */
+
+.endCard {
+  position: absolute;
+  inset: 0;
+  z-index: 4;
+  background: var(--ink);
+  color: var(--paper);
+  display: flex;
+  flex-direction: column;
+  justify-content: center;
+  gap: 28px;
+  padding: 32px;
+  box-sizing: border-box;
+  opacity: 0;
+  pointer-events: none;
+  transition: opacity 300ms;
+}
+.endCard.show {
+  opacity: 1;
+  pointer-events: auto;
+}
+
+.endStats {
+  display: grid;
+  grid-template-columns: repeat(3, minmax(0, 1fr));
+  gap: 16px;
+}
+.endStat {
+  border-top: 2px solid rgba(244, 242, 238, 0.3);
+  padding-top: 10px;
+}
+.endStat.accent {
+  border-top-color: var(--accent-on-dark);
+}
+.endValue {
+  margin: 0;
+  font-family: var(--font-display), sans-serif;
+  font-weight: 700;
+  font-size: clamp(22px, 3vw, 34px);
+  letter-spacing: -0.03em;
+}
+.endValue.accent {
+  color: var(--accent-on-dark);
+}
+.endLabel {
+  margin: 6px 0 0;
+  font-size: 12px;
+  color: #cfcac2;
+  line-height: 1.4;
+}
+
+.endActions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+.endBtn {
+  font-family: var(--font-mono), monospace;
+  font-size: 13px;
+  padding: 10px 16px;
+  min-height: 40px;
+  border-radius: var(--radius-pill);
+  border: 1px solid var(--paper);
+  background: transparent;
+  color: var(--paper);
+  cursor: pointer;
+}
+.endBtnPrimary {
+  background: var(--accent-on-dark);
+  color: var(--ink);
+  border-color: var(--accent-on-dark);
+}
+.endBtn:focus-visible {
+  outline: 2px solid var(--accent-on-dark);
+  outline-offset: 2px;
+}
+
+/* ---- Dialog / mobile overlay ---- */
+
+.overlay {
+  position: fixed;
+  inset: 0;
+  z-index: 200;
+  background: var(--ink);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+}
+
+.dialogBox {
+  position: relative;
+  width: min(900px, 92vw);
+  background: var(--ink);
+  border-radius: 16px;
+  overflow: hidden;
+  box-shadow: 0 40px 100px rgba(0, 0, 0, 0.5);
+  display: flex;
+  flex-direction: column;
+}
+
+.dialogClip {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 16 / 9;
+  flex-shrink: 0;
+}
+
+.dialogBoxPortrait {
+  width: min(420px, 86vw);
+}
+
+.dialogBoxPortrait .dialogClip {
+  aspect-ratio: 4 / 5;
+}
+
+.mobileBox {
+  position: relative;
+  width: 100%;
+  height: 100%;
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  justify-content: center;
+}
+
+.mobileScreenWrap {
+  display: flex;
+  flex-direction: column;
+  width: 90vw;
+  max-width: 420px;
+  max-height: calc(100vh - 140px);
+}
+
+.mobileScreen {
+  position: relative;
+  width: 100%;
+  aspect-ratio: 4 / 5;
+  flex-shrink: 0;
+}
+
+.closeBtn {
+  position: absolute;
+  left: 20px;
+  top: 20px;
+  z-index: 210;
+  width: 44px;
+  height: 44px;
+  min-width: 44px;
+  min-height: 44px;
+  border-radius: 999px;
+  border: 0;
+  background: rgba(255, 255, 255, 0.12);
+  color: #fff;
+  font-size: 18px;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  cursor: pointer;
+}
+.closeBtn:focus-visible {
+  outline: 2px solid var(--accent-on-dark);
+  outline-offset: 2px;
+}
+
+.discStrip {
+  display: flex;
+  gap: 14px;
+  margin-top: 24px;
+  padding: 0 20px;
+  max-width: 100%;
+  overflow-x: auto;
+}
+
+.discStripItem {
+  flex: 0 0 auto;
+  width: 52px;
+  height: 52px;
+  border-radius: 50%;
+  border: 2px solid transparent;
+  background-size: cover;
+  background-position: center;
+  background-color: #2a2a2a;
+  cursor: pointer;
+  padding: 0;
+}
+.discStripItem.active {
+  border-color: var(--accent-on-dark);
+}
+.discStripItem:focus-visible {
+  outline: 2px solid var(--accent-on-dark);
+  outline-offset: 3px;
+}
+
+@media (max-width: 640px) {
+  .endCard {
+    padding: 24px 20px;
+    gap: 20px;
+  }
+  .endStats {
+    grid-template-columns: 1fr;
+    gap: 14px;
+  }
+}
