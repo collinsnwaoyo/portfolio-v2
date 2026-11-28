@@ -84,12 +84,20 @@ export default function Hero() {
       </div>
 
       <div className={styles.below}>
-        <h1 className={styles.kicker} data-testid="font-mono" data-reveal="kicker">
-          A senior product designer who also ships
+        <h1 className={styles.kicker}>
+          <span className={styles.lineClip}>
+            <span className={styles.lineInner} data-testid="font-mono" data-reveal="kicker">
+              A senior product designer who also ships
+            </span>
+          </span>
         </h1>
-        <p className={styles.sub} data-testid="font-body" data-reveal="sub">
-          Nine years turning messy, rule-heavy products into simple ones. Fintech, proptech,
-          compliance and AI tools. Now I build them too.
+        <p className={styles.sub}>
+          <span className={styles.lineClip}>
+            <span className={styles.lineInner} data-testid="font-body" data-reveal="sub">
+              Nine years turning messy, rule-heavy products into simple ones. Fintech, proptech,
+              compliance and AI tools. Now I build them too.
+            </span>
+          </span>
         </p>
         <span className={styles.scroll}>↓ Scroll for the work</span>
       </div>

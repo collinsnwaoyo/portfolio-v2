@@ -85,25 +85,27 @@ export default function Loader() {
       const kicker = document.querySelector<HTMLElement>('[data-reveal="kicker"]');
       const sub = document.querySelector<HTMLElement>('[data-reveal="sub"]');
       const dock = document.querySelector<HTMLElement>('[data-reveal="dock"]');
+      // Kicker and sub are transform-only too, each clipped by its own
+      // overflow:hidden wrapper (Hero.module.css .lineClip): the line is
+      // genuinely hidden off the bottom of its box, not merely faded, so
+      // there is no partly-transparent frame to ever fail contrast.
       if (kicker) {
-        anim(
-          kicker,
-          [
-            { opacity: 0, transform: 'translateY(24px)' },
-            { opacity: 1, transform: 'translateY(0)' },
-          ],
-          { duration: 700, delay: base, easing: OUT }
-        );
+        kicker.style.opacity = '1';
+        kicker.style.transform = 'translateY(110%)';
+        anim(kicker, [{ transform: 'translateY(110%)' }, { transform: 'translateY(0)' }], {
+          duration: 700,
+          delay: base,
+          easing: OUT,
+        });
       }
       if (sub) {
-        anim(
-          sub,
-          [
-            { opacity: 0, transform: 'translateY(16px)' },
-            { opacity: 1, transform: 'translateY(0)' },
-          ],
-          { duration: 700, delay: base + 120, easing: OUT }
-        );
+        sub.style.opacity = '1';
+        sub.style.transform = 'translateY(110%)';
+        anim(sub, [{ transform: 'translateY(110%)' }, { transform: 'translateY(0)' }], {
+          duration: 700,
+          delay: base + 120,
+          easing: OUT,
+        });
       }
       if (dock) {
         // Transform-only (no opacity): moved fully off-screen below the
